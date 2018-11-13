@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/Home1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#8f7a65">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/hometitle"
+            android:layout_marginLeft="40dp"/>
+        <Button
+            android:id="@+id/Coin"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toLeftOf="@id/myroom_bt"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/coin"/>
+        <Button
+            android:id="@+id/myroom_bt"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/mybt"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fef4e8"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역 검색"
+            android:textSize="18dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"/>
+        <LinearLayout
+            android:id="@+id/Home2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <Spinner
+                android:id="@+id/Spinner_do"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:entries="@array/Do"
+                android:layout_marginLeft="10dp"/>
+
+            <Spinner
+                android:id="@+id/Spinner_si"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:entries="@array/Si" />
+            <Button
+                android:id="@+id/Search"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/search"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/Home3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="방 생성"
+                android:textSize="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/Create_room"
+                android:layout_marginRight="10dp"
+                />
+            <Button
+                android:id="@+id/Create_room"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/crearoom"
+                android:layout_marginRight="15dp"/>
+
+
+        </RelativeLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/test"
+            android:text="test"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <GridView
+                android:id="@+id/Home_grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnWidth="70dp"
+                android:stretchMode="columnWidth"
+                android:numColumns="2"
+                android:verticalSpacing="10dp"
+                android:horizontalSpacing="10dp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                >
+
+            </GridView>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

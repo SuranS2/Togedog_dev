@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignupActivity"
+    android:orientation="vertical"
+    android:background="@drawable/back">
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#fef4e8"
+        android:text="프로필 입력"
+        android:textSize="28dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/Name_Input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닉네임 :  "
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/Nick_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="활동에 필요합니다."
+            android:maxLines="1"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/Overlap"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/overlap"
+            android:onClick="onClick"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="견적사항"
+        android:textSize="23dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:id="@+id/Dog_Photo_in"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/profile"
+        android:onClick="onClick" />
+
+    <LinearLayout
+        android:id="@+id/Dog_IN1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이름 :"
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            />
+        <EditText
+            android:id="@+id/Dog_Name_in"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Dog_IN2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="15dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="생년월일:"
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:layout_marginLeft="13dp"
+            android:id="@+id/Dog_birth"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:hint="생년월일이 표시됩니다."/>
+
+        <Button
+            android:id="@+id/btn_birth"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/calender"
+            android:onClick="onClick"/>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Dog_IN3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="성별"
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioGroup_Gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/Boy_in"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/radiogroup_gender_boy"
+                android:button="@null"
+                android:checked="true"
+                android:text="남"/>
+            <!-- android:textColor="@android:color/transparent" -->
+
+            <RadioButton
+                android:id="@+id/Girl_in"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/radiogroup_gender_girl"
+                android:button="@null"
+                android:text="여"/>
+            <!-- android:textColor="@android:color/transparent" -->
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중성화"
+            android:textSize="18dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <RadioGroup
+            android:id="@+id/radioGroup_Neut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/Neut_yesin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/radiogroup_neut_yesin"
+                android:button="@null"
+                android:checked="true"
+                android:text="유"
+                android:textColor="@android:color/transparent" />
+
+            <RadioButton
+                android:id="@+id/Neut_noin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/radiogroup_neut_noin"
+                android:button="@null"
+                android:text="무"
+                android:textColor="@android:color/transparent" />
+
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Dog_IN4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="견종 : "
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            />
+        <EditText
+            android:id="@+id/Dog_Type_in"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:maxLines="1"
+            android:layout_marginRight="35dp"
+            />
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup_Size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/So_in"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/radiogroup_size_so"
+                android:button="@null"
+                android:checked="true"
+                android:text="소"
+                android:textColor="@android:color/transparent" />
+
+            <RadioButton
+                android:id="@+id/Joong_in"
+                android:layout_width="37dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/radiogroup_size_joong"
+                android:button="@null"
+                android:text="중"
+                android:textColor="@android:color/transparent" />
+
+            <RadioButton
+                android:id="@+id/Dae_in"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/radiogroup_size_dae"
+                android:button="@null"
+                android:text="대"
+                android:textColor="@android:color/transparent" />
+
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Dog_IN5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="몸무게 : "
+            android:textSize="18dp"
+            android:layout_marginLeft="10dp"
+            />
+        <EditText
+            android:id="@+id/Dog_Kg_in"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:maxLines="1"
+            android:inputType="number"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kg"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="등록번호 : "
+            android:textSize="18dp"
+            android:layout_marginLeft="20dp"
+            />
+        <EditText
+            android:id="@+id/Dog_Num_in"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:maxLines="1"
+            android:inputType="number"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/Join"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/join"
+        android:onClick="onClick"
+        />
+
+
+</LinearLayout>

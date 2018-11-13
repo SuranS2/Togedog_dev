@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#fef4e8"
+    android:layout_marginBottom="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="15dp">
+
+    <RelativeLayout android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:background="#8f7a65">
+
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@drawable/membertitle"
+            android:textSize="20dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/ImageView1"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/Mem_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/Mem1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/Mem_photo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/Mem_nick"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:layout_marginLeft="20dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:text="닉네임"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+
+        >
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="#8f7a65"
+            android:id="@+id/Close_member"
+            android:layout_marginRight="10dp"
+            android:textColor="#fef4e8"
+            android:text="닫기"/>
+
+
+    </LinearLayout>
+</LinearLayout>

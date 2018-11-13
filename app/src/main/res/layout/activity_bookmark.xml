@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/Book1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#8f7a65">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:background="@drawable/myrtitle"
+            android:layout_marginLeft="40dp"
+            android:layout_centerVertical="true"/>
+        <Button
+            android:id="@+id/Coin"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toLeftOf="@id/Home_bt"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/coin"/>
+        <Button
+            android:id="@+id/Home_bt"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/homebt"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/Book2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fef4e8"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="※ 가입한 시간 순으로 모임이 표시됩니다 ※"/>
+
+        <GridView
+            android:id="@+id/Book_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnWidth="70dp"
+            android:numColumns="3"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            >
+        </GridView>
+    </LinearLayout>
+</LinearLayout>

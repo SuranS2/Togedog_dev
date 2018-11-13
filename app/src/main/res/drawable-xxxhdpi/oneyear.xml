@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/limbt2" android:state_selected="false" android:state_pressed="false"/>
+    <item android:drawable="@drawable/limbt2_checked" android:state_pressed="true" />
+    <item android:state_selected="true" android:drawable="@drawable/limbt2_checked"/>
+</selector>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--http://yoo-hyeok.tistory.com/57 커스텀 라디오버튼 참고-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_checked="false" android:drawable="@drawable/boy"/>
+    <item android:state_checked="true" android:drawable="@drawable/boy_checked"/>
+</selector>

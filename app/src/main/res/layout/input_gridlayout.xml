@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/test_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="방제목"
+        />
+    <TextView
+        android:id="@+id/test_input2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="주 모임 지역"
+
+        />
+    <TextView
+        android:id="@+id/test_input3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="주 모임 시간"
+
+        />
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/mon_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/mon"
+        />
+        <ImageView
+            android:id="@+id/tue_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tues"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:id="@+id/wed_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/wednes"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:id="@+id/thu_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/thurs"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:id="@+id/fri_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fri"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:id="@+id/sat_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/satur"
+            android:layout_weight="1"
+            />
+        <ImageView
+            android:id="@+id/sun_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sun"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        >
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/limbt1"
+            />
+
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/limbt2"
+          />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/limbt3"
+           />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/limbt4"
+            />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/limbt5"
+            />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/limbt6"
+             />
+    </LinearLayout>
+</LinearLayout>
