@@ -225,20 +225,19 @@ public class HomeActivity extends AppCompatActivity {
     //채팅방 리스트 불러오기
     private void showChatList() {
         // 리스트 어댑터 생성 및 세팅
-        final ArrayAdapter<String> adapter
-
-                = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         chat_list.setAdapter(adapter);
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
         databaseReference.child("chat").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());
+                adapter.add(dataSnapshot.getKey());
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.e("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());
             }
 
             @Override
