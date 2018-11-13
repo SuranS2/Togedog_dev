@@ -50,6 +50,7 @@ public class CreateActivity extends AppCompatActivity{
 
     //firebase 채팅방 생성
     private EditText user_chat;
+    private ListView chat_list;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     //firebase 채팅방 생성
@@ -58,8 +59,9 @@ public class CreateActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+        chat_list = (ListView) findViewById(R.id.chat_list);
 
-//        Intent intent = intent.getComponent();
+        Intent intent = getIntent();
 
         yearSpinner = (Spinner)findViewById(R.id.Spinner_time1);
         ArrayAdapter yearAdapter = ArrayAdapter.createFromResource(this, R.array.date_time, android.R.layout.simple_spinner_item);

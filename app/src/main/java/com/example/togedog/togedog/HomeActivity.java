@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity {
     private EditText user_edit;
     private ListView chat_list;
+
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
@@ -50,7 +53,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
 
         Intent intent = getIntent();
 
@@ -135,16 +137,16 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //방생성 버튼
+        chat_list = (ListView) findViewById(R.id.chat_list);
 
-//        chat_list = (ListView) findViewById(R.id.chat_list);
+
+
+        //방생성 버튼
         Button button3 = (Button)findViewById(R.id.Create_room);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent3= new Intent(getApplicationContext(), CreateActivity.class);
-                //채팅리스트 id넘김
-                intent3.putExtra("chat_list" , chat_list.getId());
                 startActivity(intent3);
             }
         });
@@ -227,6 +229,14 @@ public class HomeActivity extends AppCompatActivity {
         // 리스트 어댑터 생성 및 세팅
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         chat_list.setAdapter(adapter);
+        //리스트 액션 추가
+        chat_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object o = chat_list.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(), "test" ,Toast.LENGTH_LONG).show();
+            }
+        });
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
         databaseReference.child("chat").addChildEventListener(new ChildEventListener() {

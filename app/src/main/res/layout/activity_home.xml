@@ -106,18 +106,25 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <ListView
+                android:id="@+id/chat_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ListView>
+            <!--그리드뷰 노쓸모됨-->
             <GridView
                 android:id="@+id/Home_grid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:columnWidth="70dp"
-                android:stretchMode="columnWidth"
-                android:numColumns="2"
-                android:verticalSpacing="10dp"
-                android:horizontalSpacing="10dp"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
-                >
+                android:columnWidth="70dp"
+                android:gravity="center"
+                android:horizontalSpacing="10dp"
+                android:numColumns="2"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="10dp"
+                android:visibility="gone">
 
             </GridView>
         </RelativeLayout>
