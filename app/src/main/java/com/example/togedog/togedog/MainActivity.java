@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -98,17 +99,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+
                             // Sign in success, update UI with the signed-in user's information
 
                             FirebaseUser user = Auth.getCurrentUser();
                             Toast.makeText(MainActivity.this, "Firebase아이디 로그인", Toast.LENGTH_LONG).show();
 
-                            database.getReference().child("Profile").addValueEventListener(new ValueEventListener() {
+                            database.getReference().child("User").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    profileDTO.clear();
-                                    if(dataSnapshot.getValue() != null){
+                                    if(dataSnapshot.child(Auth.getUid()).exists()){
                                         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                        Log.e("확인" , "홈액티비티");
                                         startActivity(intent); //다음 액티비티 이동
 
                                     }else{

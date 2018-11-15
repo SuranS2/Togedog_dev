@@ -4,7 +4,7 @@ import android.text.Editable;
 
 public class ProfileDTO {
     public String imageUrl;
-    public String nick;
+    public String Nick;
     public String Dogname;
     public String Birth;
     public String DogType;

@@ -460,7 +460,7 @@ public class SignupActivity extends AppCompatActivity {
                     ProfileDTO profileDTO = new ProfileDTO();
 
                     profileDTO.imageUrl = downloadUri.toString();
-                    profileDTO.nick = nick.getText().toString();
+                    profileDTO.Nick = nick.getText().toString();
                     profileDTO.Dogname= dog_name.getText().toString();
                     profileDTO.Birth = birth.getText().toString();
                     profileDTO.DogType = dog_type.getText().toString();
@@ -469,8 +469,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     profileDTO.uid = auth.getCurrentUser().getUid();
                     profileDTO.userid = auth.getCurrentUser().getEmail();
-                    profileDTO.dpname = auth.getCurrentUser().getDisplayName();
-                    database.getReference().child("Profile").setValue(profileDTO);
+                    database.getReference().child("User").child(auth.getUid()).setValue(profileDTO);
                 } else {
                     // Handle failures
                     // ...
