@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                         }
                         else{
-                            Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+//                            Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(intent);
                             //Toast.makeText(MainActivity.this, "Firebase 아이디 생성이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                         }

@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,6 +58,7 @@ public class CreateActivity extends AppCompatActivity{
     private EditText chat_name;
     private ListView chat_list;
     private ListView chat_view;
+    private FirebaseAuth auth;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -405,7 +407,8 @@ public class CreateActivity extends AppCompatActivity{
 
 
     private void updateChatList(String chat_name) {
-        ChatDTO chat = new ChatDTO("☺", "채팅방이 생성되었습니다");
+        auth = FirebaseAuth.getInstance();
+        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
         databaseReference.child("chat").child(chat_name).push().setValue(chat); // 데이터 푸쉬
     }
 

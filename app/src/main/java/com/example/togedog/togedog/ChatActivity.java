@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +37,7 @@ public class ChatActivity extends AppCompatActivity {
     //채팅창 접속
     private String CHAT_NAME;
     private String USER_NAME;
+    private FirebaseAuth auth;
 //    인증 id 연결으로 대체
 
 
@@ -113,8 +115,9 @@ public class ChatActivity extends AppCompatActivity {
 
         // 로그인 화면에서 받아온 채팅방 이름, 유저 이름 저장
         Intent intent = getIntent();
-        CHAT_NAME = intent.getStringExtra("chatName");
-        USER_NAME = "TEST";
+        CHAT_NAME = intent.getStringExtra("chat_name");
+        auth = FirebaseAuth.getInstance();
+        USER_NAME = auth.getCurrentUser().getDisplayName();
 //                intent.getStringExtra("userName");
 //        인증 ID로 대체
 
@@ -175,7 +178,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     //채팅창 접속
-    private void openChat(String chatName) {
+    private void openChat(String chat_name) {
         // 리스트 어댑터 생성 및 세팅
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         chat_view.setAdapter(adapter);
@@ -218,7 +221,7 @@ public class ChatActivity extends AppCompatActivity {
         
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
-        databaseReference.child("chat").child(chatName).addChildEventListener(new ChildEventListener() {
+        databaseReference.child("chat").child(chat_name).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 addMessage(dataSnapshot, adapter);

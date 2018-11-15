@@ -193,6 +193,9 @@ public class HomeActivity extends AppCompatActivity {
 
             }
 
+
+
+            
             TextView textView1 = (TextView) convertView.findViewById(R.id.test_input);
 
             TextView textView2 = (TextView) convertView.findViewById(R.id.test_input2);
@@ -236,7 +239,7 @@ public class HomeActivity extends AppCompatActivity {
                 Object o = chat_list.getItemAtPosition(position);
                 Toast.makeText(getApplicationContext(), o.toString() ,Toast.LENGTH_LONG).show();
                 Intent chat_id_intent = new Intent(getApplicationContext(),ChatActivity.class);
-                chat_id_intent.putExtra("chatName" , o.toString() );
+                chat_id_intent.putExtra("chat_name" , o.toString() );
                 startActivity(chat_id_intent);
             }
         });
