@@ -20,14 +20,19 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+
 public class CreateActivity extends AppCompatActivity{
-    EditText editText,editText2,editText3;
+    EditText editText2,editText3;
     Button create_button,button, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, button12,button19;
     Spinner yearSpinner, yearSpinner2,monthSpinner,monthSpinner2;
     Intent intent;
@@ -49,17 +54,21 @@ public class CreateActivity extends AppCompatActivity{
 
 
     //firebase 채팅방 생성
-    private EditText user_chat;
+    private EditText chat_name;
     private ListView chat_list;
+    private ListView chat_view;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
     //firebase 채팅방 생성
+    private Intent room_create = new Intent(CreateActivity.this, HomeActivity.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
         chat_list = (ListView) findViewById(R.id.chat_list);
+        chat_view = (ListView) findViewById(R.id.chat_view);
 
         Intent intent = getIntent();
 
@@ -109,7 +118,7 @@ public class CreateActivity extends AppCompatActivity{
 
 
 
-        intent = new Intent(CreateActivity.this, HomeActivity.class);
+        room_create = new Intent(CreateActivity.this, HomeActivity.class);
 
 
     }
@@ -326,33 +335,28 @@ public class CreateActivity extends AppCompatActivity{
                 */
                 
 
-                if(ch1==1) intent.putExtra("six_month", "six_month");
-                if(ch2==1) intent.putExtra("year", "one_year");
-                if(ch3==1) intent.putExtra("small", "small");
-                if(ch4==1) intent.putExtra("medium", "medium");
-                if(ch5==1) intent.putExtra("big", "big");
-                if(ch6==1) intent.putExtra("unlimit", "unlimt");
-
-                if(ch7==1) intent.putExtra("mon", "mon");
-                if(ch8==1) intent.putExtra("tue", "tue");
-                if(ch9==1) intent.putExtra("wed", "wed");
-                if(ch10==1) intent.putExtra("thu", "thu");
-                if(ch11==1) intent.putExtra("fri", "fri");
-                if(ch12==1) intent.putExtra("sat","sat");
-                if(ch13==1)intent.putExtra("sun", "sun");
+//                if(ch1==1) intent.putExtra("six_month", "six_month");
+//                if(ch2==1) intent.putExtra("year", "one_year");
+//                if(ch3==1) intent.putExtra("small", "small");
+//                if(ch4==1) intent.putExtra("medium", "medium");
+//                if(ch5==1) intent.putExtra("big", "big");
+//                if(ch6==1) intent.putExtra("unlimit", "unlimt");
+//
+//                if(ch7==1) intent.putExtra("mon", "mon");
+//                if(ch8==1) intent.putExtra("tue", "tue");
+//                if(ch9==1) intent.putExtra("wed", "wed");
+//                if(ch10==1) intent.putExtra("thu", "thu");
+//                if(ch11==1) intent.putExtra("fri", "fri");
+//                if(ch12==1) intent.putExtra("sat","sat");
+//                if(ch13==1)intent.putExtra("sun", "sun");
 
                 //채팅방 이름
-                user_chat = (EditText) findViewById(R.id.Room_name);
-                String edit1 = "";
-                edit1 = editText.getText().toString();
+                chat_name = (EditText) findViewById(R.id.Room_name);
 
                 // 방 이름 전송
-                if(user_chat.getText().toString().equals("") && edit1.length()==0){
+                if(chat_name.getText().toString().equals("")){
                     Toast.makeText(this,"방 제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else {
-                    intent.putExtra("chat_name_test", user_chat.getText().toString());
                 }
 
                 editText2 = (EditText) findViewById(R.id.Place_Search);
@@ -363,7 +367,7 @@ public class CreateActivity extends AppCompatActivity{
                     break;
                 }
                 else {
-                    intent.putExtra("입력한제목2", edit2);
+//                    intent.putExtra("입력한제목2", edit2);
                 }
 
                 editText3 = (EditText) findViewById(R.id.Warning);
@@ -374,68 +378,35 @@ public class CreateActivity extends AppCompatActivity{
                     break;
                 }
                 else {
-                    intent.putExtra("입력한제목3", edit3);
+//                    intent.putExtra("입력한제목3", edit3);
                 }
 
 
-                hour1=yearSpinner.getSelectedItem().toString();
-                minute1=monthSpinner.getSelectedItem().toString();
-                intent.putExtra("hour1", hour1);
-                intent.putExtra("minute1", minute1);
-
-                hour2=yearSpinner2.getSelectedItem().toString();
-                minute2=monthSpinner2.getSelectedItem().toString();
-                intent.putExtra("hour2", hour2);
-                intent.putExtra("minute2", minute2);
-                intent.putExtra("count",Integer.toString(count));
+//                hour1=yearSpinner.getSelectedItem().toString();
+//                minute1=monthSpinner.getSelectedItem().toString();
+//                intent.putExtra("hour1", hour1);
+//                intent.putExtra("minute1", minute1);
+//
+//                hour2=yearSpinner2.getSelectedItem().toString();
+//                minute2=monthSpinner2.getSelectedItem().toString();
+//                intent.putExtra("hour2", hour2);
+//                intent.putExtra("minute2", minute2);
+//                intent.putExtra("count",Integer.toString(count));
 
                 //firebase 채팅방 리스트 업데이트
-//                updateChatList();
-                startActivity(intent);
+                updateChatList(chat_name.getText().toString());
+                startActivity(room_create);
 
                 break;
         }
     }
 
-//    private ListView chat_list = getChatlist;
-//    private void updateChatList() {
-//        // 리스트 어댑터 생성 및 세팅
-//        final ArrayAdapter<String> adapter
-//
-//                = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
-//        chat_list.setAdapter(adapter);
-//
-//        // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
-//        databaseReference.child("chat").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Log.e("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());
-//                adapter.add(dataSnapshot.getKey());
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//    }
 
 
+
+    private void updateChatList(String chat_name) {
+        ChatDTO chat = new ChatDTO("☺", "채팅방이 생성되었습니다");
+        databaseReference.child("chat").child(chat_name).push().setValue(chat); // 데이터 푸쉬
+    }
 
 }

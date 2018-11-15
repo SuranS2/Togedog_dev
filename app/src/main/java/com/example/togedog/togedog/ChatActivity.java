@@ -1,5 +1,6 @@
 package com.example.togedog.togedog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -176,7 +179,43 @@ public class ChatActivity extends AppCompatActivity {
         // 리스트 어댑터 생성 및 세팅
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         chat_view.setAdapter(adapter);
-        //화면에 chat_view 설정 필요!
+
+//        //길게누르면 다이얼로그 띄우기
+////        chat_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+////            @Override
+////            public boolean onItemLongClick(AdapterView<?> parent, View view, int i, long id) { // view:클릭한 뷰 position: id:position이랑 일반적으로 같다
+////                final int position = i;
+////
+////                AlertDialog.Builder builder= new AlertDialog.Builder(ChatActivity.this);
+////                //builder에게 옵션주기
+////                builder.setTitle("삭제하기");
+////                builder.setMessage("이 메시지를 삭제할까요?");
+////                //3개 가능/ 메시지, 일어나야하는일
+////                builder.setPositiveButton("네", new DialogInterface.OnClickListener() {
+////                    @Override
+////                    public void onClick(DialogInterface dialog, int i) {
+////                        array.remove(position);
+////                        adapter.notifyDataSetChanged();//새로고침
+////                    }
+////                });
+////                //취소
+////                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+////                    @Override
+////                    public void onClick(DialogInterface dialog, int which) {
+////                        dialog.dismiss();
+////                    }
+////                });
+////
+////                builder.show();
+////
+////                return false;//true하면 일반클릭과 롱클릭 둘다 먹고 false하면 롱클릭만 먹는다
+////            }
+////        });
+////
+////
+//////        출처: https://kutar37.tistory.com/67 [저장소]
+        
+        
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
         databaseReference.child("chat").child(chatName).addChildEventListener(new ChildEventListener() {
@@ -218,6 +257,7 @@ public class ChatActivity extends AppCompatActivity {
     private void removeMessage(DataSnapshot dataSnapshot, ArrayAdapter<String> adapter) {
         ChatDTO chatDTO = dataSnapshot.getValue(ChatDTO.class);
         adapter.remove(chatDTO.getUserName() + " : " + chatDTO.getMessage());
+        
     }
     //메세지 전송
 }
