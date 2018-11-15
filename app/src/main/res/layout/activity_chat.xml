@@ -10,11 +10,11 @@
     tools:openDrawer="start">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="?attr/colorPrimary" />-->
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -81,6 +81,10 @@
             android:layout_height="match_parent"
             android:background="#fef4e8">
 
+            <ListView
+                android:id="@+id/chat_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -88,13 +92,14 @@
                 android:background="#ffffff"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/Chatedit"
+                    android:id="@+id/chat_edit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@android:color/transparent"
                     />
                 <Button
+                    android:id='@+id/chat_sent'
                     android:layout_width="25dp"
                     android:layout_height="20dp"
                     android:background="@drawable/chatbt"

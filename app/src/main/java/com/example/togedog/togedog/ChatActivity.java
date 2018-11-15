@@ -32,7 +32,7 @@ public class ChatActivity extends AppCompatActivity {
 
     //채팅창 접속
     private String CHAT_NAME;
-//    private String USER_NAME;
+    private String USER_NAME;
 //    인증 id 연결으로 대체
 
 
@@ -90,12 +90,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
@@ -104,14 +104,15 @@ public class ChatActivity extends AppCompatActivity {
 
         //채팅창 접속
         // 위젯 ID 참조
-//        chat_view = (ListView) findViewById(R.id.chat_view);
-//        chat_edit = (EditText) findViewById(R.id.chat_edit);
-//        chat_send = (Button) findViewById(R.id.chat_sent);
+        chat_view = (ListView) findViewById(R.id.chat_view);
+        chat_edit = (EditText) findViewById(R.id.chat_edit);
+        chat_send = (Button) findViewById(R.id.chat_sent);
 
         // 로그인 화면에서 받아온 채팅방 이름, 유저 이름 저장
         Intent intent = getIntent();
         CHAT_NAME = intent.getStringExtra("chatName");
-//        USER_NAME = intent.getStringExtra("userName");
+        USER_NAME = "TEST";
+//                intent.getStringExtra("userName");
 //        인증 ID로 대체
 
 
@@ -127,8 +128,8 @@ public class ChatActivity extends AppCompatActivity {
                     return;
 
                 //user name = key값
-//                ChatDTO chat = new ChatDTO(USER_NAME, chat_edit.getText().toString()); //ChatDTO를 이용하여 데이터를 묶는다.
-//                databaseReference.child("chat").child(CHAT_NAME).push().setValue(chat); // 데이터 푸쉬
+                ChatDTO chat = new ChatDTO(USER_NAME, chat_edit.getText().toString()); //ChatDTO를 이용하여 데이터를 묶는다.
+                databaseReference.child("chat").child(CHAT_NAME).push().setValue(chat); // 데이터 푸쉬
                 chat_edit.setText(""); //입력창 초기화
 
             }
@@ -173,9 +174,7 @@ public class ChatActivity extends AppCompatActivity {
     //채팅창 접속
     private void openChat(String chatName) {
         // 리스트 어댑터 생성 및 세팅
-        final ArrayAdapter<String> adapter
-
-                = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         chat_view.setAdapter(adapter);
         //화면에 chat_view 설정 필요!
 

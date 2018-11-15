@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
         final String sat=intent.getStringExtra("sat");
         final String sun=intent.getStringExtra("sun");
 
-        final String edit1 = intent.getStringExtra("chatName");
+        final String edit1 = intent.getStringExtra("chat_name_test");
         final String edit2 = intent.getStringExtra("입력한제목2");
         final String edit3 = intent.getStringExtra("입력한제목3");
 
@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
                 mon_day=0; tue_day=0; wed_day=0; thur_day=0; fri_day=0; sat_day=0; sun_day=0;
 
 
-                title.add("제목 "+edit1);
+                title.add("제목 "+ edit1);
                 search.add("모임 지역 "+edit2);
                 time.add("모임 시간 : "+hour1+" "+minute1+" ~ "+hour2+" "+minute2);
 
@@ -234,7 +234,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = chat_list.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), "test" ,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), o.toString() ,Toast.LENGTH_LONG).show();
+                Intent chat_id_intent = new Intent(getApplicationContext(),ChatActivity.class);
+                chat_id_intent.putExtra("chatName" , o.toString() );
+                startActivity(chat_id_intent);
             }
         });
 

@@ -352,7 +352,7 @@ public class CreateActivity extends AppCompatActivity{
                     break;
                 }
                 else {
-                    intent.putExtra("chatName", user_chat.getText().toString());
+                    intent.putExtra("chat_name_test", user_chat.getText().toString());
                 }
 
                 editText2 = (EditText) findViewById(R.id.Place_Search);
