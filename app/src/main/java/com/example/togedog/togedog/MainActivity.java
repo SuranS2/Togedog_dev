@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     SignInButton button;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 10;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth Auth;
     private FirebaseDatabase database;
     private List<ProfileDTO> profileDTO = new ArrayList<>();
     private List<String> uidLists = new ArrayList<>();
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         timer = new Handler(); //Handler 생성
 
-        mAuth = FirebaseAuth.getInstance();
+        Auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
 
@@ -93,14 +93,14 @@ public class MainActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        Auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = Auth.getCurrentUser();
                             Toast.makeText(MainActivity.this, "Firebase아이디 로그인", Toast.LENGTH_LONG).show();
 
                             database.getReference().child("Profile").addValueEventListener(new ValueEventListener() {
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                         } else {
 
                         }
-
                         // ...
                     }
                 });
