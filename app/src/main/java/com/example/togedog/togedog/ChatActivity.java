@@ -221,7 +221,7 @@ public class ChatActivity extends AppCompatActivity {
         
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
-        databaseReference.child("chat").child(chat_name).addChildEventListener(new ChildEventListener() {
+        databaseReference.child("chat").child("message").child(chat_name).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 addMessage(dataSnapshot, adapter);

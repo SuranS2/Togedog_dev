@@ -24,14 +24,7 @@
         <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".HomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAd8pp-esJGYkH5UY9r5PZ7B5_ChDL-GEs"/>
 
         <activity android:name=".BookmarkActivity"></activity>
 
@@ -41,7 +34,12 @@
 
         <activity android:name=".InforActivity" android:screenOrientation="sensor" android:theme="@style/Theme.MyDialog"></activity>
 
-        <activity android:name=".CreateActivity"></activity>
+        <activity android:name=".CreateActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".VotelayoutActivity" android:screenOrientation="sensor" android:theme="@style/Theme.MyDialog"></activity>
 

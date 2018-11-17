@@ -54,10 +54,15 @@ public class HomeActivity extends AppCompatActivity {
     Activity act = this;
     public static GridView gridView;
 
+
+
     //도, 시 구분
-    private Spinner spinner;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> entries;
+    private Spinner do_spinner;
+    private ArrayAdapter<String> do_adapter;
+    private ArrayList<String> do_entries;
+    private Spinner gun_spinner;
+    private ArrayAdapter<String> gun_adapter;
+    private ArrayList<String> gun_entries;
 
 
 
@@ -79,6 +84,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private String AccessToken = "";
     private String[][] Do;
+    private String[][] Gun;
 
 
 
@@ -99,20 +105,18 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Spinner DoSpin = (Spinner)findViewById(R.id.Spinner_do);
-
 
         //https://kin.naver.com/qna/detail.nhn?d1id=1&dirId=1040104&docId=294654337&qb=7JWI65Oc66Gc7J2065OcIOyKpO2UvOuEiCDqsJIg7LaU6rCA&enc=utf8&section=kin&rank=2&search_sort=0&spq=0&pid=T/s70wpVuFZsss9kmzVssssst6V-417469&sid=9xdQ/FBZJ/wNs524961Mgw%3D%3D
 
         // array.xml 에서 Do 를 가지고옵니다.
-        String[] Do_test = getResources().getStringArray(R.array.Do);
+        String[] do_test = getResources().getStringArray(R.array.Do);
         // String- ArrayList 생성, String배열 list를 ArrayList로 변환합니다.
-        entries = new ArrayList<String>(Arrays.asList(Do_test));
-        spinner = (Spinner) findViewById(R.id.Spinner_do);
+        do_entries = new ArrayList<String>(Arrays.asList(do_test));
+        do_spinner = (Spinner) findViewById(R.id.Spinner_do);
         // initialize adapter
-        adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, entries);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        do_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, do_entries);
+        do_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        do_spinner.setAdapter(do_adapter);
 
 
         Log.d("TEST length" , Integer.toString(Do[1].length ) );
@@ -120,25 +124,46 @@ public class HomeActivity extends AppCompatActivity {
         while(true){
             if(i<Do[1].length){
                 Log.d("i값",Integer.toString(i));
-                adapter.add(Do[1][i]);
-                Log.d("ㅁㄴㅇㄹ",Do[1][i]);
-                adapter.notifyDataSetChanged();
+                do_adapter.add(Do[1][i]);
             }else{
                 break;
             }
             i++;
         }
 
+        gun_spinner = (Spinner)findViewById(R.id.Spinner_Gun);
 
-//        ArrayList<String> arraylist = new ArrayList<String>();
-//        Log.d("TEST length" , Integer.toString(Do[1].length ) );
-//        for(int i=0; 0 < Do[1].length-2 ; i++){
-//            Log.d("i값",Integer.toString(i));
-//            arraylist.add(Do[1][i]);
-//        }
+        // array.xml 에서 Do 를 가지고옵니다.
+        String[] gun_test = getResources().getStringArray(R.array.Gun);
+        // String- ArrayList 생성, String배열 list를 ArrayList로 변환합니다.
+        gun_entries = new ArrayList<String>(Arrays.asList(gun_test));
+        gun_spinner = (Spinner) findViewById(R.id.Spinner_Gun);
+        // initialize adapter
+        gun_adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, gun_entries);
+        gun_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gun_spinner.setAdapter(gun_adapter);
+        do_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        DoSpin.setPrompt("도 선택");
-        DoSpin.setAdapter(adapter);
+                GunTask task3 = new GunTask(AccessToken, Integer.parseInt( Do[0][position] ) );
+                int i=0;
+                while(true){
+                    if(i<Gun[1].length){
+                        Log.d("i값",Integer.toString(i));
+                        gun_adapter.add(Gun[1][i]);
+                    }else{
+                        break;
+                    }
+                    i++;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
 
@@ -381,6 +406,86 @@ public class HomeActivity extends AppCompatActivity {
                 this.url = new URL("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json?"
                         + "pg_yn=0&"
                         + "accessToken=" + AccessToken);
+            } /*catch (java.net.MalformedURLException e) {
+                e.printStackTrace();
+            } */ catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+                if (conn.getResponseCode() == conn.HTTP_OK) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer buffer = new StringBuffer();
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                    }
+                    receiveMsg = buffer.toString();
+                    Log.i("receiveMsg : ", receiveMsg);
+
+                    reader.close();
+                } else {
+                    Log.i("통신 결과", conn.getResponseCode() + "에러");
+                }
+            } catch (java.net.MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return receiveMsg;
+        }
+
+        // initialize adapter
+
+        public String[][] DoResult(String jsonString) {
+            String cd = null;
+            String addr_name = null;
+            String full_addr = null;
+            String[][] arraysum = new String[3][17];
+            try {
+                JSONArray jarray = new JSONObject(jsonString).getJSONArray("result");
+                for (int i = 0; i < jarray.length(); i++) {
+                    HashMap map = new HashMap<>();
+                    JSONObject jObject = jarray.getJSONObject(i);
+
+                    cd = jObject.optString("cd");
+                    addr_name = jObject.optString("addr_name");
+                    full_addr = jObject.optString("full_addr");
+
+                    arraysum[0][i] = cd;
+                    arraysum[1][i] = addr_name;
+                }
+                for (int i = 0; i < arraysum[0].length; i++) {
+                    Log.d("TEST", arraysum[0][i]);
+                    Log.d("TEST", arraysum[1][i]);
+                    Log.d("TEST", Integer.toString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return arraysum;
+        }
+    }
+    class GunTask extends AsyncTask<String, Void , String> {
+        private String str, receiveMsg;
+        private URL url = null;
+        private int cd;
+
+        //군 제공 url
+        GunTask(String AccessToken, int cd) {
+            try {
+                this.url = new URL("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json?"
+                        + "pg_yn=0&"
+                        + "cd=" + cd + "&"
+                        + "accessToken=" + AccessToken);
+                this.cd = cd;
             } /*catch (java.net.MalformedURLException e) {
                 e.printStackTrace();
             } */ catch (IOException e) {

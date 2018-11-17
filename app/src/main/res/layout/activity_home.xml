@@ -52,10 +52,10 @@
                 android:layout_marginLeft="10dp"/>
 
             <Spinner
-                android:id="@+id/Spinner_si"
+                android:id="@+id/Spinner_Gun"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:entries="@array/Si" />
+                android:entries="@array/Gun" />
             <Button
                 android:id="@+id/Search"
                 android:layout_width="30dp"

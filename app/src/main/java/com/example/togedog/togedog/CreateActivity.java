@@ -237,41 +237,11 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     }
     public void onActivityResult(int requestCode , int resultCode , Intent data){
         super.onActivityResult(requestCode , resultCode , data);
-        if(resultCode != RESULT_OK) {
-            return;
-        }
-        if ((requestCode == PLACE_PICKER_REQUEST) && (resultCode == Activity.RESULT_OK)) {
-
-            final Place place = PlacePicker.getPlace(this, data);
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
-            String attributions = (String) place.getAttributions();
-            if (attributions == null) {
-                attributions = "";
-            }
-            String address_1=address.toString();
-
-            String[] array = address_1.split(" ");
-
-            doo_1 = array[1];
-            si_1 = array[2];
-
-            mName.setText(doo_1);
-            mAddress.setText(si_1);
-            mAttributions.setText(Html.fromHtml(attributions));
-
-            ImagePath = getPath(data.getData());
-            upload(ImagePath);
-
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
         switch(requestCode){
             case PICK_FROM_ALBUM:{
                 //이후의 처리가 카메라와 같으므로 일단 Break 없이 진행
                 //실제 코드에서는 좀 더 합리적인 방법을 선택하시길 바랍니다.
                 mImageCaputreUri = data.getData();
-                Log.d("SmartWheel" , mImageCaputreUri.getPath().toString() );
             }
             case PICK_FROM_CAMERA:{
                 //이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정
@@ -317,7 +287,6 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 }
             }
         }
-
     }
     //Bitmap 저장하는 부분
     private void storeCropImage(Bitmap bitmap , String filePath){
@@ -344,6 +313,37 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
             out.close();
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+
+    public void MapActivityResult(int requestCode , int resultCode , Intent data){
+        if(resultCode != RESULT_OK) {
+            return;
+        }
+        if ((requestCode == PLACE_PICKER_REQUEST)
+                && (resultCode == Activity.RESULT_OK)) {
+
+            final Place place = PlacePicker.getPlace(this, data);
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            String attributions = (String) place.getAttributions();
+            if (attributions == null) {
+                attributions = "";
+            }
+            String address_1=address.toString();
+
+            String[] array = address_1.split(" ");
+
+            String doo_1 = array[1];
+            String si_1 = array[2];
+
+            mName.setText(doo_1);
+            mAddress.setText(si_1);
+            mAttributions.setText(Html.fromHtml(attributions));
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
