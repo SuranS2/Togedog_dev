@@ -2,12 +2,14 @@ package com.example.togedog.togedog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,6 +22,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +56,9 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
@@ -67,7 +75,11 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
     private String absolutePath;
-
+    private String doo_1;
+    private String si_1;
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private FirebaseStorage storage;
 
     ImageView iv_UserPhoto;
 
@@ -81,7 +93,6 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private EditText chat_name;
     private ListView chat_list;
     private ListView chat_view;
-    private FirebaseAuth auth;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -144,6 +155,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 }
             }
         });
+
 
 
         chat_list = (ListView) findViewById(R.id.chat_list);
@@ -241,11 +253,11 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 
             String[] array = address_1.split(" ");
 
-            String doo = array[1];
-            String si = array[2];
+            doo_1 = array[1];
+            si_1 = array[2];
 
-            mName.setText(doo);
-            mAddress.setText(si);
+            mName.setText(doo_1);
+            mAddress.setText(si_1);
             mAttributions.setText(Html.fromHtml(attributions));
 
         } else {
@@ -507,5 +519,55 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+
+    //도랑 시 db에 넣는 거 도전
+
+    public String getPath(Uri uri){
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(this, uri, proj,null, null, null);
+
+        Cursor cursor = cursorLoader.loadInBackground ();
+        int index = cursor.getColumnIndexOrThrow (MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(index);
+    }
+
+    private void upload(String uri){
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://togedog-3795c.appspot.com");
+
+        Uri file = Uri.fromFile(new File(uri));
+        final StorageReference riversRef = storageRef.child("Profiles/"+file.getLastPathSegment());
+        UploadTask uploadTask = riversRef.putFile(file);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return riversRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+
+                    MapDTO mapDTO = new MapDTO();
+
+                    mapDTO.doo = doo_1;
+                    mapDTO.ssi = si_1;
+                    database.getReference().child("MapTest").child(doo_1).setValue(mapDTO);
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
     }
 }
