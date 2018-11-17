@@ -85,6 +85,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 
     int count=0;
 
+    private String ImagePath;
 
 
 
@@ -239,8 +240,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         if(resultCode != RESULT_OK) {
             return;
         }
-        if ((requestCode == PLACE_PICKER_REQUEST)
-                && (resultCode == Activity.RESULT_OK)) {
+        if ((requestCode == PLACE_PICKER_REQUEST) && (resultCode == Activity.RESULT_OK)) {
 
             final Place place = PlacePicker.getPlace(this, data);
             final CharSequence name = place.getName();
@@ -259,6 +259,9 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
             mName.setText(doo_1);
             mAddress.setText(si_1);
             mAttributions.setText(Html.fromHtml(attributions));
+
+            ImagePath = getPath(data.getData());
+            upload(ImagePath);
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);
