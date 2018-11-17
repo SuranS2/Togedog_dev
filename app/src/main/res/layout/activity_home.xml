@@ -17,14 +17,6 @@
             android:background="@drawable/hometitle"
             android:layout_marginLeft="40dp"/>
         <Button
-            android:id="@+id/Coin"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_toLeftOf="@id/myroom_bt"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
-            android:background="@drawable/coin"/>
-        <Button
             android:id="@+id/myroom_bt"
             android:layout_width="30dp"
             android:layout_height="20dp"

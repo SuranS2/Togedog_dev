@@ -3,6 +3,7 @@ package com.example.togedog.togedog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +28,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 
 public class HomeActivity extends AppCompatActivity {
+
     private EditText user_edit;
     private ListView chat_list;
 
@@ -38,6 +53,14 @@ public class HomeActivity extends AppCompatActivity {
 
     Activity act = this;
     public static GridView gridView;
+
+    //도, 시 구분
+    private Spinner spinner;
+    private ArrayAdapter<String> adapter;
+    private ArrayList<String> entries;
+
+
+
 
     int day[]=new int[7];
     int mon_day=0,tue_day=0,wed_day=0,thur_day=0,fri_day=0,sat_day=0,sun_day=0;
@@ -50,86 +73,88 @@ public class HomeActivity extends AppCompatActivity {
     ImageView imageView1,imageView2,imageView3,imageView4,imageView5,imageView6,imageView7;
     int count=1;
 
+
+
+
+
+    private String AccessToken = "";
+    private String[][] Do;
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Intent intent = getIntent();
+        Intent HomeAct_intent = getIntent();
+
+        try {
+            ActTask task1 = new ActTask();
+            AccessToken = task1.execute().get();
+            DoTask task2 = new DoTask(AccessToken);
+            Do = task2.DoResult( task2.execute().get() );
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Spinner DoSpin = (Spinner)findViewById(R.id.Spinner_do);
+
+
+        //https://kin.naver.com/qna/detail.nhn?d1id=1&dirId=1040104&docId=294654337&qb=7JWI65Oc66Gc7J2065OcIOyKpO2UvOuEiCDqsJIg7LaU6rCA&enc=utf8&section=kin&rank=2&search_sort=0&spq=0&pid=T/s70wpVuFZsss9kmzVssssst6V-417469&sid=9xdQ/FBZJ/wNs524961Mgw%3D%3D
+
+        // array.xml 에서 Do 를 가지고옵니다.
+        String[] Do_test = getResources().getStringArray(R.array.Do);
+        // String- ArrayList 생성, String배열 list를 ArrayList로 변환합니다.
+        entries = new ArrayList<String>(Arrays.asList(Do_test));
+        spinner = (Spinner) findViewById(R.id.Spinner_do);
+        // initialize adapter
+        adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, entries);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
+        Log.d("TEST length" , Integer.toString(Do[1].length ) );
+        int i=0;
+        while(true){
+            if(i<Do[1].length){
+                Log.d("i값",Integer.toString(i));
+                adapter.add(Do[1][i]);
+                Log.d("ㅁㄴㅇㄹ",Do[1][i]);
+                adapter.notifyDataSetChanged();
+            }else{
+                break;
+            }
+            i++;
+        }
+
+
+//        ArrayList<String> arraylist = new ArrayList<String>();
+//        Log.d("TEST length" , Integer.toString(Do[1].length ) );
+//        for(int i=0; 0 < Do[1].length-2 ; i++){
+//            Log.d("i값",Integer.toString(i));
+//            arraylist.add(Do[1][i]);
+//        }
+
+        DoSpin.setPrompt("도 선택");
+        DoSpin.setAdapter(adapter);
+
+
+
+
+
+
 
 
         gridView = (GridView) findViewById(R.id.Home_grid);
 
-        final String six_month=intent.getStringExtra("six_month");
-        final String year=intent.getStringExtra("year");
-        final String small=intent.getStringExtra("small");
-        final String medium=intent.getStringExtra("medium");
-        final String big=intent.getStringExtra("big");
-        final String unlimit=intent.getStringExtra("unlimit");
-
-
-        final String mon=intent.getStringExtra("mon");
-        final String tue=intent.getStringExtra("tue");
-        final String wed=intent.getStringExtra("wed");
-        final String thu=intent.getStringExtra("the");
-        final String fri=intent.getStringExtra("fri");
-        final String sat=intent.getStringExtra("sat");
-        final String sun=intent.getStringExtra("sun");
-
-        final String edit1 = intent.getStringExtra("chat_name_test");
-        final String edit2 = intent.getStringExtra("입력한제목2");
-        final String edit3 = intent.getStringExtra("입력한제목3");
-
-        final String hour1=intent.getStringExtra("hour1");
-        final String minute1=intent.getStringExtra(("minute1"));
-        final String hour2=intent.getStringExtra("hour2");
-        final String minute2=intent.getStringExtra(("minute2"));
-
-
-        //chat화면 테스트용
-
-        Button button2 = (Button)findViewById(R.id.Coin);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getApplicationContext(), ChatActivity.class);
-                startActivity(intent2);
-            }
-        });
-
-
-        //방생성 테스트용
-
-        Button button4 =(Button)findViewById(R.id.test);
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mon_day=0; tue_day=0; wed_day=0; thur_day=0; fri_day=0; sat_day=0; sun_day=0;
-
-
-                title.add("제목 "+ edit1);
-                search.add("모임 지역 "+edit2);
-                time.add("모임 시간 : "+hour1+" "+minute1+" ~ "+hour2+" "+minute2);
-
-                if(mon!=null) mon_day=1;
-                if(tue!=null) tue_day=1;
-                if(wed!=null) wed_day=1;
-                if(thu!=null) thur_day=1;
-                if(fri!=null) fri_day=1;
-                if(sat!=null) sun_day=1;
-                if(sun!=null) sun_day=1;
-                int day[]={mon_day,tue_day,wed_day,thur_day,fri_day,sat_day,sun_day};
-                days.add(day);
-
-                gridView.setAdapter(new gridAdapter());
-
-            }
-        });
 
 
 
         //즐겨찾기 목록
-        Button button = (Button)findViewById(R.id.myroom_bt);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button Myroombt = (Button)findViewById(R.id.myroom_bt);
+        Myroombt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BookmarkActivity.class);
@@ -142,8 +167,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
         //방생성 버튼
-        Button button3 = (Button)findViewById(R.id.Create_room);
-        button3.setOnClickListener(new View.OnClickListener() {
+        Button Crbt = (Button)findViewById(R.id.Create_room);
+        Crbt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent3= new Intent(getApplicationContext(), CreateActivity.class);
@@ -275,4 +300,152 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    //요청주소
+// https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json
+//보안키
+// 3e509c339f3448acbb82
+//서비스id
+// 701fe9171c3541c2b601
+
+
+//도 제공 url
+//    URL url = new URL("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json?"
+//            // 도 검색
+//            + "pg_yn=0&"
+//            //액세스 토큰
+//            + " accessToken=a0472395-a539-4f67-be40-6ad967bc4329"
+//    );
+
+// 액세스 토큰 얻는 링크
+//                        url = new URL("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?"
+//                                + "consumer_key=b0de22ac13c54e3e869f&"
+//                                + "consumer_secret=8c4f11f00f41453f92a4");
+
+    class ActTask extends AsyncTask<String, Void , String> {
+        private String str, receiveMsg;
+        private URL url = null;
+        ActTask(){
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                URL url = new URL("https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?"
+                        + "consumer_key=701fe9171c3541c2b601&"
+                        + "consumer_secret=3e509c339f3448acbb82");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+                if (conn.getResponseCode() == conn.HTTP_OK) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer buffer = new StringBuffer();
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                    }
+                    receiveMsg = buffer.toString();
+                    Log.i("receiveMsg : ", receiveMsg);
+
+                    reader.close();
+                } else {
+                    Log.i("통신 결과", conn.getResponseCode() + "에러");
+                }
+            } catch (java.net.MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return AccessToken(receiveMsg);
+        }
+        private String AccessToken(String jsonString) {
+
+            String AccessT = null;
+            try {
+                JSONObject jObj = new JSONObject(jsonString);
+                JSONObject ActObj = jObj.getJSONObject("result");
+                AccessT = ActObj.getString("accessToken");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return AccessT;
+        }
+    }
+    class DoTask extends AsyncTask<String, Void , String> {
+        private String str, receiveMsg;
+        private URL url = null;
+
+        //도 제공 url
+        DoTask(String AccessToken) {
+            try {
+                this.url = new URL("https://sgisapi.kostat.go.kr/OpenAPI3/addr/stage.json?"
+                        + "pg_yn=0&"
+                        + "accessToken=" + AccessToken);
+            } /*catch (java.net.MalformedURLException e) {
+                e.printStackTrace();
+            } */ catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+
+                if (conn.getResponseCode() == conn.HTTP_OK) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer buffer = new StringBuffer();
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                    }
+                    receiveMsg = buffer.toString();
+                    Log.i("receiveMsg : ", receiveMsg);
+
+                    reader.close();
+                } else {
+                    Log.i("통신 결과", conn.getResponseCode() + "에러");
+                }
+            } catch (java.net.MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return receiveMsg;
+        }
+
+        public String[][] DoResult(String jsonString) {
+            String cd = null;
+            String addr_name = null;
+            String full_addr = null;
+            String[][] arraysum = new String[3][17];
+            try {
+                JSONArray jarray = new JSONObject(jsonString).getJSONArray("result");
+                for (int i = 0; i < jarray.length(); i++) {
+                    HashMap map = new HashMap<>();
+                    JSONObject jObject = jarray.getJSONObject(i);
+
+                    cd = jObject.optString("cd");
+                    addr_name = jObject.optString("addr_name");
+                    full_addr = jObject.optString("full_addr");
+
+                    arraysum[0][i] = cd;
+                    arraysum[1][i] = addr_name;
+                    arraysum[2][i] = full_addr;
+                }
+                for (int i = 0; i < arraysum[0].length; i++) {
+                    Log.d("TEST", arraysum[0][i]);
+                    Log.d("TEST", arraysum[1][i]);
+                    Log.d("TEST", arraysum[2][i]);
+                    Log.d("TEST", Integer.toString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return arraysum;
+        }
+    }
 }

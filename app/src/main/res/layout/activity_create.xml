@@ -194,25 +194,38 @@
 
     <LinearLayout
         android:id="@+id/Create6"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         >
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/pickerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="주 모임 장소 : "
-            android:textSize="18dp"/>
-
-        <EditText
-            android:id="@+id/Place_Search"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="검색" />
+            android:onClick="onClick"
+            android:text="주소 검색"
+            />
+
+        <TextView
+            android:id="@+id/textView_c1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:hint="위치"/>
+        <TextView
+            android:id="@+id/textView_c2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:hint="도로명주소"/>
+
+        <TextView
+            android:id="@+id/textView_c3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout

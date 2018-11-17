@@ -30,9 +30,32 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
+import org.w3c.dom.Text;
 
 
-public class CreateActivity extends AppCompatActivity{
+public class CreateActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     EditText editText2,editText3;
     Button create_button,button, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, button12,button19;
     Spinner yearSpinner, yearSpinner2,monthSpinner,monthSpinner2;
@@ -63,12 +86,66 @@ public class CreateActivity extends AppCompatActivity{
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     //firebase 채팅방 생성
-    private Intent room_create = new Intent(CreateActivity.this, HomeActivity.class);
+    private Intent room_create;
+
+    protected GeoDataClient mGeoDataClient;
+    protected PlaceDetectionClient mPlaceDetectionClient;
+    protected GoogleApiClient mGoogleApiClient;
+
+
+    private static final int PLACE_PICKER_REQUEST = 1;
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+
+    private TextView mName;
+    private TextView mAddress;
+    private TextView mAttributions;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+
+
+        // Construct a GeoDataClient.
+        mGeoDataClient = Places.getGeoDataClient(this, null);
+
+        // Construct a PlaceDetectionClient.
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
+        TextView pickerButton = (TextView) findViewById(R.id.pickerButton);
+
+        mName = (TextView) findViewById(R.id.textView_c1);
+        mAddress = (TextView) findViewById(R.id.textView_c2);
+        mAttributions = (TextView) findViewById(R.id.textView_c3);
+
+        pickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    PlacePicker.IntentBuilder intentBuilder =
+                            new PlacePicker.IntentBuilder();
+                    intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+                    Intent intent = intentBuilder.build(CreateActivity.this);
+                    startActivityForResult(intent, PLACE_PICKER_REQUEST);
+
+                } catch (GooglePlayServicesRepairableException
+                        | GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         chat_list = (ListView) findViewById(R.id.chat_list);
         chat_view = (ListView) findViewById(R.id.chat_view);
 
@@ -150,7 +227,30 @@ public class CreateActivity extends AppCompatActivity{
         if(resultCode != RESULT_OK) {
             return;
         }
+        if ((requestCode == PLACE_PICKER_REQUEST)
+                && (resultCode == Activity.RESULT_OK)) {
 
+            final Place place = PlacePicker.getPlace(this, data);
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            String attributions = (String) place.getAttributions();
+            if (attributions == null) {
+                attributions = "";
+            }
+            String address_1=address.toString();
+
+            String[] array = address_1.split(" ");
+
+            String doo = array[1];
+            String si = array[2];
+
+            mName.setText(doo);
+            mAddress.setText(si);
+            mAttributions.setText(Html.fromHtml(attributions));
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
         switch(requestCode){
             case PICK_FROM_ALBUM:{
                 //이후의 처리가 카메라와 같으므로 일단 Break 없이 진행
@@ -175,11 +275,11 @@ public class CreateActivity extends AppCompatActivity{
                 break;
 
             }
-            case CROP_FROM_iMAGE:{
+            case CROP_FROM_iMAGE: {
                 //크롭이 된 이후의 이미지를 넘겨받는다
                 //이미지뷰에 이미지를 보여준다거나 부가적인 작업 이후에
                 //임시 파일 삭제
-                if(resultCode != RESULT_OK){
+                if (resultCode != RESULT_OK) {
                     return;
                 }
                 final Bundle extras = data.getExtras();
@@ -187,21 +287,22 @@ public class CreateActivity extends AppCompatActivity{
                 //외부저장소 이용
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel/" + System.currentTimeMillis() + ".jpg";
 
-                if(extras != null){
+                if (extras != null) {
                     Bitmap photo = extras.getParcelable("data");//CROP된 BITMAP
                     iv_UserPhoto.setImageBitmap(photo);//레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
 
-                    storeCropImage(photo , filePath); //CROP된 이미지를 외부저장소 , 앨범에 저장한다.
+                    storeCropImage(photo, filePath); //CROP된 이미지를 외부저장소 , 앨범에 저장한다.
                     absolutePath = filePath;
                     break;
                 }
                 //임시 파일 삭제
                 File f = new File(mImageCaputreUri.getPath());
-                if(f.exists()){
+                if (f.exists()) {
                     f.delete();
                 }
             }
         }
+
     }
     //Bitmap 저장하는 부분
     private void storeCropImage(Bitmap bitmap , String filePath){
@@ -361,16 +462,7 @@ public class CreateActivity extends AppCompatActivity{
                     break;
                 }
 
-                editText2 = (EditText) findViewById(R.id.Place_Search);
-                String edit2 = "";
-                edit2 = editText2.getText().toString();
-                if(edit2.length()==0){
-                    Toast.makeText(this,"주 모임 장소를\n 입력해주세요.",Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                else {
-//                    intent.putExtra("입력한제목2", edit2);
-                }
+
 
                 editText3 = (EditText) findViewById(R.id.Warning);
                 String edit3 = "";
@@ -412,4 +504,8 @@ public class CreateActivity extends AppCompatActivity{
         databaseReference.child("chat").child(chat_name).push().setValue(chat); // 데이터 푸쉬
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }
