@@ -121,6 +121,8 @@ public class HomeActivity extends AppCompatActivity {
 
         Log.d("TEST length" , Integer.toString(Do[1].length ) );
         int i=0;
+        do_adapter.clear();
+        do_adapter.add("도 선택");
         while(true){
             if(i<Do[1].length){
                 Log.d("i값",Integer.toString(i));
@@ -301,10 +303,9 @@ public class HomeActivity extends AppCompatActivity {
         chat_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object o = chat_list.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), o.toString() ,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), chat_list.getSelectedItem().toString() ,Toast.LENGTH_LONG).show();
                 Intent chat_id_intent = new Intent(getApplicationContext(),ChatActivity.class);
-                chat_id_intent.putExtra("chat_name" , o.toString() );
+                chat_id_intent.putExtra("chat_name" , chat_list.getSelectedItem().toString() );
                 startActivity(chat_id_intent);
             }
         });
