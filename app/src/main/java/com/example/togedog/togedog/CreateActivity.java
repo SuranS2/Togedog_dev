@@ -50,11 +50,13 @@ import org.w3c.dom.Text;
 
 public class CreateActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     int count=0;
-    EditText editText2,editText3;
+    EditText editTextWarning;
 //    Button limitsix_bt, limityear_bt, limitso_bt, limitjung_bt, limitdae_bt, unlimit_bt,monday_bt, Tuesday_bt, Wednesday_bt, Thursday_bt, button10, button11, button12,create_button;
     Spinner shourspinner, fhourspinner,sminutespinner,fminutespinner;
    
-    int lm1=0,lm2=0,lm3=0,lm4=0,lm5=0,lm6=0,dow1=0,dow2=0,dow3=0,dow4=0,dow5=0,dow6=0,dow7=0;
+//    int lm1=0,lm2=0,lm3=0,lm4=0,lm5=0,lm6=0,dow[0]=0,dow[1]=0,dow[2]=0,dow[3]=0,dow[4]=0,dow[5]=0,dow[6]=0;
+    int[] lm = {0, 0, 0, 0, 0, 0};
+    int[] dow = {0, 0, 0, 0, 0, 0, 0};
     Uri mImageCaputreUri;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
@@ -337,56 +339,56 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                         .show();
                 break;
             case R.id.Limit_bt1:
-                if(view.isSelected()) lm1=1;
-                else lm1=0;
+                if(view.isSelected()) lm[0]=1;
+//                else lm[0]=0;
                 break;
             case R.id.Limit_bt2:
-                if(view.isSelected()) lm2=1;
-                else lm2=0;
+                if(view.isSelected()) lm[1]=1;
+//                else lm[1]=0;
                 break;
             case R.id.Limit_bt3:
-                if(view.isSelected()) lm3=1;
-                else lm3=0;
+                if(view.isSelected()) lm[2]=1;
+//                else lm[2]=0;
                 break;
             case R.id.Limit_bt4:
-                if(view.isSelected()) lm4=1;
-                else lm4=0;
+                if(view.isSelected()) lm[3]=1;
+//                else lm[3]=0;
                 break;
             case R.id.Limit_bt5:
-                if(view.isSelected()) lm5=1;
-                else lm5=0;
+                if(view.isSelected()) lm[4]=1;
+//                else lm[4]=0;
                 break;
             case R.id.Limit_bt6:
-                if(view.isSelected()) lm6=1;
-                else lm6=0;
+                if(view.isSelected()) lm[5]=1;
+//                else lm[5]=0;
                 break;
             case R.id.Monday:
-                if(view.isSelected()) dow1=1;
-                else dow1=0;
+                if(view.isSelected()) dow[0]=1;
+//                else dow[0]=0;
                 break;
             case R.id.Tuesday:
-                if(view.isSelected()) dow2=1;
-                else dow2=0;
+                if(view.isSelected()) dow[1]=1;
+//                else dow[1]=0;
                 break;
             case R.id.Wednesday:
-                if(view.isSelected()) dow3=1;
-                else dow3=0;
+                if(view.isSelected()) dow[2]=1;
+//                else dow[2]=0;
                 break;
             case R.id.Thursday:
-                if(view.isSelected()) dow4=1;
-                else dow4=0;
+                if(view.isSelected()) dow[3]=1;
+//                else dow[3]=0;
                 break;
             case R.id.Friday:
-                if(view.isSelected()) dow5=1;
-                else dow5=0;
+                if(view.isSelected()) dow[4]=1;
+//                else dow[4]=0;
                 break;
             case R.id.Saturday:
-                if(view.isSelected()) dow6=1;
-                else dow6=0;
+                if(view.isSelected()) dow[5]=1;
+//                else dow[5]=0;
                 break;
             case R.id.Sunday:
-                if(view.isSelected()) dow7=1;
-                else dow7=0;
+                if(view.isSelected()) dow[6]=1;
+//                else dow[6]=0;
                 break;
             case R.id.Create_bt:
 
@@ -410,10 +412,10 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                     Toast.makeText(this,"방 제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
                     break;
                 }
-                editText3 = (EditText) findViewById(R.id.Warning);
-                String edit3 = "";
-                edit3 = editText3.getText().toString();
-                if(edit3.length()==0){
+                editTextWarning = (EditText) findViewById(R.id.Warning);
+                String editWarning_str = "";
+                editWarning_str = editTextWarning.getText().toString();
+                if(chat_name.getText().toString().equals("")){
                     Toast.makeText(this,"주의사항을 입력해주세요.",Toast.LENGTH_SHORT).show();
                     break;
                 }
@@ -424,20 +426,21 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 chatinfo_dto.fin_hour = fhourspinner.getSelectedItem().toString();
                 chatinfo_dto.fin_min = fhourspinner.getSelectedItem().toString();
                 
-                chatinfo_dto.chat_mon = dow1;
-                chatinfo_dto.chat_tues = dow2;
-                chatinfo_dto.chat_wed = dow3;
-                chatinfo_dto.chat_thur = dow4;
-                chatinfo_dto.chat_fri = dow5;
-                chatinfo_dto.chat_sat = dow6;
-                chatinfo_dto.chat_sun = dow7;
-                
-                chatinfo_dto.chat_limitsixmon = lm1;
-                chatinfo_dto.chat_limityear = lm2;
-                chatinfo_dto.chat_limitso = lm3;
-                chatinfo_dto.chat_limitjung = lm4;
-                chatinfo_dto.chat_limitdae = lm5;
-                chatinfo_dto.chat_unlimit = lm6;
+                chatinfo_dto.dow = dow;
+//                chatinfo_dto.chat_tues = dow[1];
+//                chatinfo_dto.chat_wed = dow[2];
+//                chatinfo_dto.chat_thur = dow[3];
+//                chatinfo_dto.chat_fri = dow[4];
+//                chatinfo_dto.chat_sat = dow[5];
+//                chatinfo_dto.chat_sun = dow[6];
+                chatinfo_dto.lm = lm;
+//                chatinfo_dto.chat_limitsixmon = lm1;
+//                chatinfo_dto.chat_limityear = lm2;
+//                chatinfo_dto.chat_limitso = lm3;
+//                chatinfo_dto.chat_limitjung = lm4;
+//                chatinfo_dto.chat_limitdae = lm5;
+//                chatinfo_dto.chat_unlimit = lm6;
+                chatinfo_dto.chat_warning = editWarning_str;
                 
                 //firebase 채팅방 리스트 업데이트
                 // 방 이름 전송
