@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -51,10 +52,10 @@ import org.w3c.dom.Text;
 public class CreateActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     int count=0;
     EditText editTextWarning;
-//    Button limitsix_bt, limityear_bt, limitso_bt, limitjung_bt, limitdae_bt, unlimit_bt,monday_bt, Tuesday_bt, Wednesday_bt, Thursday_bt, button10, button11, button12,create_button;
+    Button limitsix_bt, limityear_bt, limitso_bt, limitjung_bt, limitdae_bt, unlimit_bt,monday_bt, tuesday_bt, wednesday_bt, thursday_bt, friday_bt, saturday_bt, sunday_bt,create_button;
     Spinner shourspinner, fhourspinner,sminutespinner,fminutespinner;
    
-//    int lm1=0,lm2=0,lm3=0,lm4=0,lm5=0,lm6=0,dow[0]=0,dow[1]=0,dow[2]=0,dow[3]=0,dow[4]=0,dow[5]=0,dow[6]=0;
+//    int lm[0]=0,lm[1]=0,lm[2]=0,lm[3]=0,lm[4]=0,lm[5]=0,dow[0]=0,dow[1]=0,dow[2]=0,dow[3]=0,dow[4]=0,dow[5]=0,dow[6]=0;
     int[] lm = {0, 0, 0, 0, 0, 0};
     int[] dow = {0, 0, 0, 0, 0, 0, 0};
     Uri mImageCaputreUri;
@@ -149,8 +150,11 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         yearAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fhourspinner.setAdapter(yearAdapter2);
 
-
-
+        limitsix_bt = (Button)findViewById(R.id.Limit_bt1);
+        limityear_bt = (Button)findViewById(R.id.Limit_bt2);
+        limitso_bt = (Button)findViewById(R.id.Limit_bt3);
+        limitjung_bt = (Button)findViewById(R.id.Limit_bt4);
+        limitdae_bt = (Button)findViewById(R.id.Limit_bt5);
 
         sminutespinner = (Spinner)findViewById(R.id.Spinner_minute1);
         ArrayAdapter monthAdapter = ArrayAdapter.createFromResource(this, R.array.date_minute, android.R.layout.simple_spinner_item);
@@ -307,88 +311,97 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         view.setSelected(!view.isSelected());
         switch (view.getId()) {
             // 버튼 이벤트
-            case R.id.Create_img :
-                // 참고 http://jeongchul.tistory.com/287
-                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doTakePhotoAction();
-                    }
-                };
-
-                // 앨범선택! (사진 선택해서 등록)
-                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doTakeAlbumAction();
-                    }
-                };
-                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                };
-
-                // 알림창 등록 및 띄우기
-                new AlertDialog.Builder(this)
-                        .setTitle("업로드할 이미지 선택")
-                        .setPositiveButton("사진촬영",cameraListener)
-                        .setNeutralButton("앨범선택", albumListener)
-                        .setNegativeButton("취소",cancelListener)
-                        .show();
-                break;
+//            case R.id.Create_img :
+//                // 참고 http://jeongchul.tistory.com/287
+//                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        doTakePhotoAction();
+//                    }
+//                };
+//
+//                // 앨범선택! (사진 선택해서 등록)
+//                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        doTakeAlbumAction();
+//                    }
+//                };
+//                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                };
+//
+//                // 알림창 등록 및 띄우기
+//                new AlertDialog.Builder(this)
+//                        .setTitle("업로드할 이미지 선택")
+//                        .setPositiveButton("사진촬영",cameraListener)
+//                        .setNeutralButton("앨범선택", albumListener)
+//                        .setNegativeButton("취소",cancelListener)
+//                        .show();
+//                break;
             case R.id.Limit_bt1:
                 if(view.isSelected()) lm[0]=1;
-//                else lm[0]=0;
+                else lm[0]=0;
                 break;
             case R.id.Limit_bt2:
                 if(view.isSelected()) lm[1]=1;
-//                else lm[1]=0;
+                else lm[1]=0;
                 break;
             case R.id.Limit_bt3:
                 if(view.isSelected()) lm[2]=1;
-//                else lm[2]=0;
+                else lm[2]=0;
                 break;
             case R.id.Limit_bt4:
                 if(view.isSelected()) lm[3]=1;
-//                else lm[3]=0;
+                else lm[3]=0;
                 break;
             case R.id.Limit_bt5:
                 if(view.isSelected()) lm[4]=1;
-//                else lm[4]=0;
+                else lm[4]=0;
                 break;
             case R.id.Limit_bt6:
-                if(view.isSelected()) lm[5]=1;
-//                else lm[5]=0;
+                if(view.isSelected()){
+                    limitsix_bt.setSelected(false);
+                    limityear_bt.setSelected(false);
+                    limitso_bt.setSelected(false);
+                    limitjung_bt.setSelected(false);
+                    limitdae_bt.setSelected(false);
+                    for(int i=0; i<lm.length-1 ; i++){
+                        lm[i]=0;
+                    }
+                    lm[5]=1;
+                }else lm[5]=0;
                 break;
             case R.id.Monday:
                 if(view.isSelected()) dow[0]=1;
-//                else dow[0]=0;
+                else dow[0]=0;
                 break;
             case R.id.Tuesday:
                 if(view.isSelected()) dow[1]=1;
-//                else dow[1]=0;
+                else dow[1]=0;
                 break;
             case R.id.Wednesday:
                 if(view.isSelected()) dow[2]=1;
-//                else dow[2]=0;
+                else dow[2]=0;
                 break;
             case R.id.Thursday:
                 if(view.isSelected()) dow[3]=1;
-//                else dow[3]=0;
+                else dow[3]=0;
                 break;
             case R.id.Friday:
                 if(view.isSelected()) dow[4]=1;
-//                else dow[4]=0;
+                else dow[4]=0;
                 break;
             case R.id.Saturday:
                 if(view.isSelected()) dow[5]=1;
-//                else dow[5]=0;
+                else dow[5]=0;
                 break;
             case R.id.Sunday:
                 if(view.isSelected()) dow[6]=1;
-//                else dow[6]=0;
+                else dow[6]=0;
                 break;
             case R.id.Create_bt:
 
@@ -426,20 +439,25 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 chatinfo_dto.fin_hour = fhourspinner.getSelectedItem().toString();
                 chatinfo_dto.fin_min = fhourspinner.getSelectedItem().toString();
                 
-                chatinfo_dto.dow = dow;
-//                chatinfo_dto.chat_tues = dow[1];
-//                chatinfo_dto.chat_wed = dow[2];
-//                chatinfo_dto.chat_thur = dow[3];
-//                chatinfo_dto.chat_fri = dow[4];
-//                chatinfo_dto.chat_sat = dow[5];
-//                chatinfo_dto.chat_sun = dow[6];
-                chatinfo_dto.lm = lm;
-//                chatinfo_dto.chat_limitsixmon = lm1;
-//                chatinfo_dto.chat_limityear = lm2;
-//                chatinfo_dto.chat_limitso = lm3;
-//                chatinfo_dto.chat_limitjung = lm4;
-//                chatinfo_dto.chat_limitdae = lm5;
-//                chatinfo_dto.chat_unlimit = lm6;
+//                chatinfo_dto.dow = dow;
+                chatinfo_dto.chat_tues = dow[1];
+                chatinfo_dto.chat_wed = dow[2];
+                chatinfo_dto.chat_thur = dow[3];
+                chatinfo_dto.chat_fri = dow[4];
+                chatinfo_dto.chat_sat = dow[5];
+                chatinfo_dto.chat_sun = dow[6];
+//                chatinfo_dto.lm = lm;
+                if(lm[5]==1){
+                    for(int i=0; i<lm.length-1 ; i++){
+                        lm[i]=0;
+                    }
+                }
+                chatinfo_dto.chat_limitsixmon = lm[0];
+                chatinfo_dto.chat_limityear = lm[1];
+                chatinfo_dto.chat_limitso = lm[2];
+                chatinfo_dto.chat_limitjung = lm[3];
+                chatinfo_dto.chat_limitdae = lm[4];
+                chatinfo_dto.chat_unlimit = lm[5];
                 chatinfo_dto.chat_warning = editWarning_str;
                 
                 //firebase 채팅방 리스트 업데이트

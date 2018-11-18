@@ -52,50 +52,6 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:49861874315:android:54563cff1022ddb7",
-        "android_client_info": {
-          "package_name": "com.example.skyze.myapplication"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "49861874315-ob4crkb7enic0t93cdjv0prs4acj9v09.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.skyze.myapplication",
-            "certificate_hash": "b487721e2cc16f9289483c42ece0af78964f9113"
-          }
-        },
-        {
-          "client_id": "49861874315-8f1mhbov00vd982o6ve1b5tq6rl0dmnt.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBLlZkUwMWWHnwrnxZnoINFP6WKPbNkJjs"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "49861874315-8f1mhbov00vd982o6ve1b5tq6rl0dmnt.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:49861874315:android:32bb3fdd847bcc4f",
         "android_client_info": {
           "package_name": "com.example.togedog.togedog"
@@ -111,47 +67,11 @@
           }
         },
         {
-          "client_id": "49861874315-8f1mhbov00vd982o6ve1b5tq6rl0dmnt.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBLlZkUwMWWHnwrnxZnoINFP6WKPbNkJjs"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "49861874315-8f1mhbov00vd982o6ve1b5tq6rl0dmnt.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:49861874315:android:fd6d14e20bfbd456",
-        "android_client_info": {
-          "package_name": "com.example.yuhui.togedog_0_4"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "49861874315-mntd2dpkii9soff63m9a4p2llsk05blp.apps.googleusercontent.com",
+          "client_id": "49861874315-fkv3v02k06idiiaclcdb4it5g56c6n9d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.yuhui.togedog_0_4",
-            "certificate_hash": "b487721e2cc16f9289483c42ece0af78964f9113"
+            "package_name": "com.example.togedog.togedog",
+            "certificate_hash": "29b071cef53cebdf50c228efa30c0370360d636d"
           }
         },
         {

@@ -3,8 +3,9 @@
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
     <dimen name="wide_size">40px</dimen>
+    <dimen name="request_image_width">200dp</dimen>
+    <dimen name="request_image_height">200dp</dimen>
+
 
 </resources>

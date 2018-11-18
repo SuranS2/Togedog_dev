@@ -1,6 +1,5 @@
 package com.example.togedog.togedog;
 
-
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -41,6 +40,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,8 +53,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Calendar;
 
-
 public class SignupActivity extends AppCompatActivity {
+
 
 
     private String ImagePath;
@@ -110,8 +110,8 @@ public class SignupActivity extends AppCompatActivity {
         dog_kg = (EditText) findViewById(R.id.Dog_Kg_in);
         dog_num = (EditText) findViewById(R.id.Dog_Num_in);
         //사진 뷰에 나타낼때 넓이이
-//        reqWidth = getResources().getDimensionPixelSize(R.dimen.request_image_width);
-//        reqHeight = getResources().getDimensionPixelSize(R.dimen.request_image_height);
+        reqWidth = getResources().getDimensionPixelSize(R.dimen.request_image_width);
+        reqHeight = getResources().getDimensionPixelSize(R.dimen.request_image_height);
     }
 
     // id 설정 출처 http://pblab.tistory.com/20
@@ -199,92 +199,6 @@ public class SignupActivity extends AppCompatActivity {
                 break;
             case R.id.Join : {
                 upload(ImagePath);
-                Intent intent = new Intent(this, HomeActivity.class);   // 보내는 클래스, 받는 클래스
-                startActivity(intent);
-
-                // 인텐트 Nick_in 키에 문자열 데이터 적재
-                if (nick.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(this, "반려견의 별칭을 기입해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    intent.putExtra("Dog_nick", nick.getText().toString());
-
-                }
-
-                // 인텐트 Nick_in 키에 문자열 데이터 적재
-                if (dog_name.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(this, "반려견의 이름을 기입해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    intent.putExtra("Dog_name", dog_name.getText().toString());
-
-                }
-
-
-                // 인텐트 Nick_in 키에 문자열 데이터 적재
-                if (dog_name.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(this, "반려견의 견종을 기입해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    intent.putExtra("Dog_type", dog_type.getText().toString());
-
-                }
-
-
-                // 인텐트 Nick_in 키에 문자열 데이터 적재
-                if (dog_kg.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(this, "반려견의 몸무게를 기입해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    intent.putExtra("Dog_kg", Integer.parseInt(dog_kg.getText().toString()));
-
-                }
-
-
-                // 인텐트 Nick_in 키에 문자열 데이터 적재
-                if (dog_num.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(this, "반려견의 등록번호를 기입해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    intent.putExtra("Dog_num", Integer.parseInt(dog_num.getText().toString()));
-
-                }
-                if (birth.getText().toString().length() == 0) {
-                    //공백일 때 처리할 내용
-                    Toast.makeText(this, "반려견의 생년월일을 입력해주세요", Toast.LENGTH_SHORT).show();
-                    break;
-                } else {
-                    //공백이 아닐 때 처리할 내용
-                    intent.putExtra("Dog_birth", birth.getText().toString());
-
-                }
-
-                String rg_gender_selected = Radiogroup_Selected(R.id.radioGroup_Gender);
-                String rg_neut_selected = Radiogroup_Selected(R.id.radioGroup_Neut);
-                String rg_size_selected = Radiogroup_Selected(R.id.radioGroup_Size);
-
-                intent.putExtra("Gender", rg_gender_selected); // "Gender"란 키 값으로 문자열 Gender 선택값을 넘김
-                intent.putExtra("Neut", rg_neut_selected); // "Gender"란 키 값으로 문자열 Neut 선택값을 넘김
-                intent.putExtra("Size", rg_size_selected); // "Gender"란 키 값으로 문자열 Size 선택값을 넘김
-
-
-                Drawable d = iv_UserPhoto.getDrawable();
-                Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
-                // 참고 http://installed.tistory.com/entry/20-%EB%8B%A4%EB%A5%B8-Activity-%EB%A1%9C-text%EC%99%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%84%98%EA%B8%B0%EA%B8%B0
-                intent.putExtra("Dog_img", bitmap);
-                // 가입 버튼 누를 시 홈 액티비티로 인텐트 보냄
-
-
                 break;
             }
         }
@@ -301,7 +215,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 //photoURI= FileProvider.getUriForFile(SignupActivity.this, BuildConfig.APPLICATION_ID+".provider"+"", filePath);
                 Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaputreUri);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, PICK_FROM_CAMERA);
             }catch (Exception e){
                 e.printStackTrace();
@@ -328,35 +242,13 @@ public class SignupActivity extends AppCompatActivity {
 
         switch(requestCode){
             case PICK_FROM_ALBUM:{
-                //이후의 처리가 카메라와 같으므로 일단 Break 없이 진행
-                //실제 코드에서는 좀 더 합리적인 방법을 선택하시길 바랍니다.
-                // mImageCaputreUri = data.getData();
-                //Log.d("SmartWheel" , mImageCaputreUri.getPath().toString() );
 
                 ImagePath = getPath(data.getData());
                 File f = new File(ImagePath);
                 iv_UserPhoto.setImageURI(Uri.fromFile(f));
 
-                /*
-                try {
-                    // 선택한 이미지에서 비트맵 생성
-                    InputStream in = getContentResolver().openInputStream(data.getData());
-                    Bitmap img = BitmapFactory.decodeStream(in);
-                    in.close();
-                    // 이미지 표시
-                    iv_UserPhoto.setImageBitmap(img);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                */
-
-/*
-                //사진 파일 스토리지에 업로드
-
-                */
             }
             case PICK_FROM_CAMERA:{
-
 
                 if(filePath != null){
 
@@ -386,38 +278,8 @@ public class SignupActivity extends AppCompatActivity {
                     iv_UserPhoto.setImageBitmap(bitmap);
                 }
 
-
-
             }
-            /*
-            case CROP_FROM_iMAGE:{
-                //크롭이 된 이후의 이미지를 넘겨받는다
-                //이미지뷰에 이미지를 보여준다거나 부가적인 작업 이후에
-                //임시 파일 삭제
-                if(resultCode != RESULT_OK){
-                    return;
-                }
-                final Bundle extras = data.getExtras();
-                //CROP된 이미지를 저장하기 위한 FILE 경로
-                //외부저장소 이용
-                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel/" + System.currentTimeMillis() + ".jpg";
-                //내부저장소 이용
-                //String filePath = getFilesDir().getAbsolutePath() + "/SmartWheel/" + System.currentTimeMillis() + ".jpg";
-                if(extras != null){
-                    Bitmap photo = extras.getParcelable("data");//CROP된 BITMAP
-                    iv_UserPhoto.setImageBitmap(photo);//레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
 
-                    //storeCropImage(photo , filePath); //CROP된 이미지를 외부저장소 , 앨범에 저장한다.
-                    absolutePath = filePath;
-                    break;
-                }
-                //임시 파일 삭제
-                File f = new File(mImageCaputreUri.getPath());
-                if(f.exists()){
-                    f.delete();
-                }
-            }
-*/
         }
 
     }
@@ -438,7 +300,7 @@ public class SignupActivity extends AppCompatActivity {
         StorageReference storageRef = storage.getReferenceFromUrl("gs://togedog-3795c.appspot.com");
 
         Uri file = Uri.fromFile(new File(uri));
-        final StorageReference riversRef = storageRef.child("Profiles/"+file.getLastPathSegment());
+        final StorageReference riversRef = storageRef.child("Profiles/").child(auth.getUid());
         UploadTask uploadTask = riversRef.putFile(file);
 
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -458,7 +320,6 @@ public class SignupActivity extends AppCompatActivity {
                     Uri downloadUri = task.getResult();
 
                     ProfileDTO profileDTO = new ProfileDTO();
-
                     profileDTO.imageUrl = downloadUri.toString();
                     profileDTO.Nick = nick.getText().toString();
                     profileDTO.Dogname= dog_name.getText().toString();
@@ -469,7 +330,17 @@ public class SignupActivity extends AppCompatActivity {
 
                     profileDTO.uid = auth.getCurrentUser().getUid();
                     profileDTO.userid = auth.getCurrentUser().getEmail();
-                    database.getReference().child("User").child(auth.getUid()).setValue(profileDTO);
+                    database.getReference().child("User").child(auth.getUid()).child("GoogleId").setValue(profileDTO.userid);
+                    database.getReference().child("User").child(auth.getUid()).child("NickName").setValue(profileDTO.Nick);
+                    database.getReference().child("User").child(auth.getUid()).child("ProfileImage").setValue(profileDTO.imageUrl);
+                    database.getReference().child("User").child(auth.getUid()).child("DogName").setValue(profileDTO.Dogname);
+                    database.getReference().child("User").child(auth.getUid()).child("Birth").setValue(profileDTO.Birth);
+                    database.getReference().child("User").child(auth.getUid()).child("DogType").setValue(profileDTO.DogType);
+                    database.getReference().child("User").child(auth.getUid()).child("DogWeight").setValue(profileDTO.DogWeight);
+                    database.getReference().child("User").child(auth.getUid()).child("DogNum").setValue(profileDTO.DogNum);
+
+                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);   // 보내는 클래스, 받는 클래스
+                    startActivity(intent);
                 } else {
                     // Handle failures
                     // ...
@@ -477,34 +348,4 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-/*
-    //Bitmap 저장하는 부분
-    private void storeCropImage(Bitmap bitmap , String filePath){
-        // SmartWheel 폴더를 생성하여 이미지를 저장하는 방식
-        // 외부저장소 절대경로
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel";
-        // 내부저장소 절대경로
-        //String dirPath = getFilesDir().getAbsolutePath() + "/SmartWheel";
-        File directory_SmartWheel = new File(dirPath);
-
-        if(!directory_SmartWheel.exists()){
-            //SmartWheel 디렉터리에 폴더가 없다면 (새로 이미지를 저장할 경우 )
-            directory_SmartWheel.mkdir();
-        }
-        File copyFile = new File(filePath);
-        BufferedOutputStream out = null;
-
-        try{
-            copyFile.createNewFile();
-            out = new BufferedOutputStream(new FileOutputStream(copyFile));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100 , out );
-            //sendBroadcast를 통해 Crop된 사진을 앨범에 보이도록 갱신
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE , Uri.fromFile(copyFile)));
-            out.flush();
-            out.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    */
 }
