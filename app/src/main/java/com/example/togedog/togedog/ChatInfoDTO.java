@@ -5,25 +5,29 @@ import android.text.Editable;
 public class ChatInfoDTO {
 
     public String imageUrl_chat;
-    public String chat_title;
-    public String chat_mon;
-    public String chat_tues;
-    public String chat_wed;
-    public String chat_thur;
-    public String chat_fri;
-    public String chat_sat;
-    public String chat_sun;
+
+    public int chat_mon;
+    public int chat_tues;
+    public int chat_wed;
+    public int chat_thur;
+    public int chat_fri;
+    public int chat_sat;
+    public int chat_sun;
+
     public String sta_hour;
     public String sta_min;
     public String fin_hour;
     public String fin_min;
+
     public String chat_do;
     public String chat_gun;
-    public String chat_sixmon;
-    public String chat_oneye;
-    public String chat_limitso;
-    public String chat_limitjung;
-    public String chat_limitdae;
-    public String chat_unlimit;
-    public String chat_caution;
+
+    public int chat_limitsixmon;
+    public int chat_limityear;
+    public int chat_limitso;
+    public int chat_limitjung;
+    public int chat_limitdae;
+    public int chat_unlimit;
+
+    public String chat_warning;
 }

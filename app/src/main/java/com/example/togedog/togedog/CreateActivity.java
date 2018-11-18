@@ -2,48 +2,31 @@ package com.example.togedog.togedog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.togedog.togedog.ChatInfoDTO;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import android.app.Activity;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -66,48 +49,37 @@ import org.w3c.dom.Text;
 
 
 public class CreateActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+    int count=0;
     EditText editText2,editText3;
-    Button create_button,button, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, button12,button19;
-    Spinner yearSpinner, yearSpinner2,monthSpinner,monthSpinner2;
-    Intent intent;
-    String title3,title4,hour1,hour2,minute1,minute2;
-    int ch1=0,ch2=0,ch3=0,ch4=0,ch5=0,ch6=0,ch7=0,ch8=0,ch9=0,ch10=0,ch11=0,ch12=0,ch13=0;
+//    Button limitsix_bt, limityear_bt, limitso_bt, limitjung_bt, limitdae_bt, unlimit_bt,monday_bt, Tuesday_bt, Wednesday_bt, Thursday_bt, button10, button11, button12,create_button;
+    Spinner shourspinner, fhourspinner,sminutespinner,fminutespinner;
+   
+    int lm1=0,lm2=0,lm3=0,lm4=0,lm5=0,lm6=0,dow1=0,dow2=0,dow3=0,dow4=0,dow5=0,dow6=0,dow7=0;
     Uri mImageCaputreUri;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
+    private String ImagePath;
     private String absolutePath;
-    private String chat_do;
-    private String chat_gun;
-    private FirebaseAuth auth;
-    private FirebaseDatabase database;
-    private FirebaseStorage storage;
-
+    
+    
+    
+    
     ImageView iv_UserPhoto;
 
-    int count=0;
-
-    private String ImagePath;
-
-
-
-
+    
     //firebase 채팅방 생성
     private EditText chat_name;
-    private ListView chat_list;
-    private ListView chat_view;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     //firebase 채팅방 생성
     private Intent room_create;
-    private ChatInfoDTO ChatInfo_DTO;
+    private ChatInfoDTO chatinfo_dto;
 
     protected GeoDataClient mGeoDataClient;
     protected PlaceDetectionClient mPlaceDetectionClient;
     protected GoogleApiClient mGoogleApiClient;
-
-
     private static final int PLACE_PICKER_REQUEST = 3;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
@@ -115,17 +87,17 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mName;
     private TextView mAddress;
     private TextView mAttributions;
-
-
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-//    DatabaseReference conditionRef = mRootRef.child("chat");
+    private String chat_do;
+    private String chat_gun;
+    
+    private FirebaseAuth auth;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-
+        chatinfo_dto = new ChatInfoDTO();
 
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
@@ -164,57 +136,31 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
 
-
-
-        chat_list = (ListView) findViewById(R.id.chat_list);
-        chat_view = (ListView) findViewById(R.id.chat_view);
-
-        Intent intent = getIntent();
-
-        yearSpinner = (Spinner)findViewById(R.id.Spinner_time1);
+        shourspinner = (Spinner)findViewById(R.id.Spinner_time1);
         ArrayAdapter yearAdapter = ArrayAdapter.createFromResource(this, R.array.date_time, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        yearSpinner.setAdapter(yearAdapter);
+        shourspinner.setAdapter(yearAdapter);
 
 
-        yearSpinner2 = (Spinner)findViewById(R.id.Spinner_time2);
+        fhourspinner = (Spinner)findViewById(R.id.Spinner_time2);
         ArrayAdapter yearAdapter2 = ArrayAdapter.createFromResource(this, R.array.date_time, android.R.layout.simple_spinner_item);
         yearAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        yearSpinner2.setAdapter(yearAdapter2);
+        fhourspinner.setAdapter(yearAdapter2);
 
 
 
 
-        monthSpinner = (Spinner)findViewById(R.id.Spinner_minute1);
+        sminutespinner = (Spinner)findViewById(R.id.Spinner_minute1);
         ArrayAdapter monthAdapter = ArrayAdapter.createFromResource(this, R.array.date_minute, android.R.layout.simple_spinner_item);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        monthSpinner.setAdapter(monthAdapter);
+        sminutespinner.setAdapter(monthAdapter);
 
 
 
-        monthSpinner2 = (Spinner)findViewById(R.id.Spinner_minute2);
+        fminutespinner = (Spinner)findViewById(R.id.Spinner_minute2);
         ArrayAdapter monthAdapter2 = ArrayAdapter.createFromResource(this, R.array.date_minute, android.R.layout.simple_spinner_item);
         monthAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        monthSpinner2.setAdapter(monthAdapter2);
-
-
-
-        iv_UserPhoto = (ImageView)findViewById(R.id.Create_img);
-        create_button = (Button)findViewById(R.id.Create_bt);
-        button = (Button)findViewById(R.id.Limit_bt1);
-        button2 = (Button)findViewById(R.id.Limit_bt2);
-        button3 = (Button)findViewById(R.id.Limit_bt3);
-        button4 = (Button)findViewById(R.id.Limit_bt4);
-        button5 = (Button)findViewById(R.id.Limit_bt5);
-        button19 = (Button)findViewById(R.id.Limit_bt6);
-        button6 = (Button)findViewById(R.id.Monday);
-        button7 = (Button)findViewById(R.id.Tuesday);
-        button8 = (Button)findViewById(R.id.Wednesday);
-        button9 = (Button)findViewById(R.id.Thursday);
-        button10 = (Button)findViewById(R.id.Friday);
-        button11 = (Button)findViewById(R.id.Saturday);
-        button12 = (Button)findViewById(R.id.Sunday);
-
+        fminutespinner.setAdapter(monthAdapter2);
 
 
         room_create = new Intent(CreateActivity.this, HomeActivity.class);
@@ -309,25 +255,8 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                     String chat_do = array[1];
                     String chat_gun = array[2];
 
-
-//                    conditionRef.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            //String text = dataSnapshot.getValue(String.class);
-//                            // dbtest1.setText(text);
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-
-
-                    ChatInfo_DTO = new ChatInfoDTO();
-
-                    ChatInfo_DTO.chat_do = chat_do;
-                    ChatInfo_DTO.chat_gun = chat_gun;
+                    chatinfo_dto.chat_do = chat_do;
+                    chatinfo_dto.chat_gun = chat_gun;
 
                     mName.setText(chat_do);
                     mAddress.setText(chat_gun);
@@ -408,57 +337,56 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                         .show();
                 break;
             case R.id.Limit_bt1:
-                if(view.isSelected()) ch1=1;
-                else ch1=0;
+                if(view.isSelected()) lm1=1;
+                else lm1=0;
                 break;
             case R.id.Limit_bt2:
-                if(view.isSelected()) ch2=1;
-                else ch2=0;
+                if(view.isSelected()) lm2=1;
+                else lm2=0;
                 break;
             case R.id.Limit_bt3:
-                if(view.isSelected()) ch3=1;
-                else ch3=0;
+                if(view.isSelected()) lm3=1;
+                else lm3=0;
                 break;
             case R.id.Limit_bt4:
-                if(view.isSelected()) ch4=1;
-                else ch4=0;
+                if(view.isSelected()) lm4=1;
+                else lm4=0;
                 break;
             case R.id.Limit_bt5:
-                if(view.isSelected()) ch5=1;
-                else ch5=0;
+                if(view.isSelected()) lm5=1;
+                else lm5=0;
                 break;
             case R.id.Limit_bt6:
-                if(view.isSelected()) ch6=1;
-                else ch6=0;
+                if(view.isSelected()) lm6=1;
+                else lm6=0;
                 break;
-
             case R.id.Monday:
-                if(view.isSelected()) ch7=1;
-                else ch7=0;
+                if(view.isSelected()) dow1=1;
+                else dow1=0;
                 break;
             case R.id.Tuesday:
-                if(view.isSelected()) ch8=1;
-                else ch8=0;
+                if(view.isSelected()) dow2=1;
+                else dow2=0;
                 break;
             case R.id.Wednesday:
-                if(view.isSelected()) ch9=1;
-                else ch9=0;
+                if(view.isSelected()) dow3=1;
+                else dow3=0;
                 break;
             case R.id.Thursday:
-                if(view.isSelected()) ch10=1;
-                else ch10=0;
+                if(view.isSelected()) dow4=1;
+                else dow4=0;
                 break;
             case R.id.Friday:
-                if(view.isSelected()) ch11=1;
-                else ch11=0;
+                if(view.isSelected()) dow5=1;
+                else dow5=0;
                 break;
             case R.id.Saturday:
-                if(view.isSelected()) ch12=1;
-                else ch12=0;
+                if(view.isSelected()) dow6=1;
+                else dow6=0;
                 break;
             case R.id.Sunday:
-                if(view.isSelected()) ch13=1;
-                else ch13=0;
+                if(view.isSelected()) dow7=1;
+                else dow7=0;
                 break;
             case R.id.Create_bt:
 
@@ -475,22 +403,6 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 intent.putExtra("Dog_img" , bitmap);
                 */
 
-
-//                if(ch1==1) intent.putExtra("six_month", "six_month");
-//                if(ch2==1) intent.putExtra("year", "one_year");
-//                if(ch3==1) intent.putExtra("small", "small");
-//                if(ch4==1) intent.putExtra("medium", "medium");
-//                if(ch5==1) intent.putExtra("big", "big");
-//                if(ch6==1) intent.putExtra("unlimit", "unlimt");
-//
-//                if(ch7==1) intent.putExtra("mon", "mon");
-//                if(ch8==1) intent.putExtra("tue", "tue");
-//                if(ch9==1) intent.putExtra("wed", "wed");
-//                if(ch10==1) intent.putExtra("thu", "thu");
-//                if(ch11==1) intent.putExtra("fri", "fri");
-//                if(ch12==1) intent.putExtra("sat","sat");
-//                if(ch13==1)intent.putExtra("sun", "sun");
-
                 //채팅방 이름
                 chat_name = (EditText) findViewById(R.id.Room_name);
 
@@ -505,28 +417,35 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                     Toast.makeText(this,"주의사항을 입력해주세요.",Toast.LENGTH_SHORT).show();
                     break;
                 }
-                else {
-//                    intent.putExtra("입력한제목3", edit3);
-                }
-
-
-//                hour1=yearSpinner.getSelectedItem().toString();
-//                minute1=monthSpinner.getSelectedItem().toString();
-//                intent.putExtra("hour1", hour1);
-//                intent.putExtra("minute1", minute1);
-//
-//                hour2=yearSpinner2.getSelectedItem().toString();
-//                minute2=monthSpinner2.getSelectedItem().toString();
-//                intent.putExtra("hour2", hour2);
-//                intent.putExtra("minute2", minute2);
-//                intent.putExtra("count",Integer.toString(count));
-
+                
+                chatinfo_dto.sta_hour = shourspinner.getSelectedItem().toString();
+                chatinfo_dto.sta_min = sminutespinner.getSelectedItem().toString();
+                
+                chatinfo_dto.fin_hour = fhourspinner.getSelectedItem().toString();
+                chatinfo_dto.fin_min = fhourspinner.getSelectedItem().toString();
+                
+                chatinfo_dto.chat_mon = dow1;
+                chatinfo_dto.chat_tues = dow2;
+                chatinfo_dto.chat_wed = dow3;
+                chatinfo_dto.chat_thur = dow4;
+                chatinfo_dto.chat_fri = dow5;
+                chatinfo_dto.chat_sat = dow6;
+                chatinfo_dto.chat_sun = dow7;
+                
+                chatinfo_dto.chat_limitsixmon = lm1;
+                chatinfo_dto.chat_limityear = lm2;
+                chatinfo_dto.chat_limitso = lm3;
+                chatinfo_dto.chat_limitjung = lm4;
+                chatinfo_dto.chat_limitdae = lm5;
+                chatinfo_dto.chat_unlimit = lm6;
+                
                 //firebase 채팅방 리스트 업데이트
                 // 방 이름 전송
                 updateChatList(chat_name.getText().toString());
                 startActivity(room_create);
 
                 break;
+                
         }
     }
 
@@ -537,7 +456,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         auth = FirebaseAuth.getInstance();
 //        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
 //        conditionRef.child(chat_name.toString()).setValue(ChatInfoDTO);
-        databaseReference.child("chat_room").child(chat_name).child("info").setValue(ChatInfo_DTO); // 데이터 푸쉬
+        databaseReference.child("chat_room").child(chat_name).child("info").setValue(chatinfo_dto); // 데이터 푸쉬
     }
 
     @Override
