@@ -3,27 +3,27 @@ package com.example.togedog.togedog;
 public class ChatDTO {
 
     private String userName;
-    private String message;
+    private String chat;
 
     public ChatDTO() {}
-    public ChatDTO(String userName, String message) {
+    public ChatDTO(String userName, String chat) {
         this.userName = userName;
-        this.message = message;
+        this.chat = chat;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setChat(String chat) {
+        this.chat = chat;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public String getMessage() {
-        return message;
+    public String getChat() {
+        return chat;
     }
 }

@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.togedog.togedog.ChatInfoDTO;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,6 +57,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -75,8 +77,8 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_iMAGE = 2;
     private String absolutePath;
-    private String doo_1;
-    private String si_1;
+    private String chat_do;
+    private String chat_gun;
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
@@ -99,19 +101,24 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     //firebase 채팅방 생성
     private Intent room_create;
+    private ChatInfoDTO ChatInfo_DTO;
 
     protected GeoDataClient mGeoDataClient;
     protected PlaceDetectionClient mPlaceDetectionClient;
     protected GoogleApiClient mGoogleApiClient;
 
 
-    private static final int PLACE_PICKER_REQUEST = 1;
+    private static final int PLACE_PICKER_REQUEST = 3;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
     private TextView mName;
     private TextView mAddress;
     private TextView mAttributions;
+
+
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+//    DatabaseReference conditionRef = mRootRef.child("chat");
 
 
     @Override
@@ -286,6 +293,52 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                     f.delete();
                 }
             }
+            case PLACE_PICKER_REQUEST:{
+                try {
+                    final Place place = PlacePicker.getPlace(this, data);
+                    final CharSequence name = place.getName();
+                    final CharSequence address = place.getAddress();
+                    String attributions = (String) place.getAttributions();
+                    if (attributions == null) {
+                        attributions = "";
+                    }
+                    String address_1 = address.toString();
+
+                    String[] array = address_1.split(" ");
+
+                    String chat_do = array[1];
+                    String chat_gun = array[2];
+
+
+//                    conditionRef.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            //String text = dataSnapshot.getValue(String.class);
+//                            // dbtest1.setText(text);
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+
+
+                    ChatInfo_DTO = new ChatInfoDTO();
+
+                    ChatInfo_DTO.chat_do = chat_do;
+                    ChatInfo_DTO.chat_gun = chat_gun;
+
+                    mName.setText(chat_do);
+                    mAddress.setText(chat_gun);
+                    mAttributions.setText(Html.fromHtml(attributions));
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                break;
+            }
+            default:
+                super.onActivityResult(requestCode , resultCode , data);
         }
     }
     //Bitmap 저장하는 부분
@@ -316,36 +369,6 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-
-    public void MapActivityResult(int requestCode , int resultCode , Intent data){
-        if(resultCode != RESULT_OK) {
-            return;
-        }
-        if ((requestCode == PLACE_PICKER_REQUEST)
-                && (resultCode == Activity.RESULT_OK)) {
-
-            final Place place = PlacePicker.getPlace(this, data);
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
-            String attributions = (String) place.getAttributions();
-            if (attributions == null) {
-                attributions = "";
-            }
-            String address_1=address.toString();
-
-            String[] array = address_1.split(" ");
-
-            String doo_1 = array[1];
-            String si_1 = array[2];
-
-            mName.setText(doo_1);
-            mAddress.setText(si_1);
-            mAttributions.setText(Html.fromHtml(attributions));
-
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
 
     public void onClick(View view) {
@@ -451,7 +474,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 // 참고 http://installed.tistory.com/entry/20-%EB%8B%A4%EB%A5%B8-Activity-%EB%A1%9C-text%EC%99%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%84%98%EA%B8%B0%EA%B8%B0
                 intent.putExtra("Dog_img" , bitmap);
                 */
-                
+
 
 //                if(ch1==1) intent.putExtra("six_month", "six_month");
 //                if(ch2==1) intent.putExtra("year", "one_year");
@@ -471,14 +494,10 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 //채팅방 이름
                 chat_name = (EditText) findViewById(R.id.Room_name);
 
-                // 방 이름 전송
                 if(chat_name.getText().toString().equals("")){
                     Toast.makeText(this,"방 제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
                     break;
                 }
-
-
-
                 editText3 = (EditText) findViewById(R.id.Warning);
                 String edit3 = "";
                 edit3 = editText3.getText().toString();
@@ -503,6 +522,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 //                intent.putExtra("count",Integer.toString(count));
 
                 //firebase 채팅방 리스트 업데이트
+                // 방 이름 전송
                 updateChatList(chat_name.getText().toString());
                 startActivity(room_create);
 
@@ -515,8 +535,9 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 
     private void updateChatList(String chat_name) {
         auth = FirebaseAuth.getInstance();
-        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
-        databaseReference.child("chat").child(chat_name).push().setValue(chat); // 데이터 푸쉬
+//        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
+//        conditionRef.child(chat_name.toString()).setValue(ChatInfoDTO);
+        databaseReference.child("chat_room").child(chat_name).child("info").setValue(ChatInfo_DTO); // 데이터 푸쉬
     }
 
     @Override
@@ -527,50 +548,5 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 
     //도랑 시 db에 넣는 거 도전
 
-    public String getPath(Uri uri){
-        String[] proj = {MediaStore.Images.Media.DATA};
-        CursorLoader cursorLoader = new CursorLoader(this, uri, proj,null, null, null);
 
-        Cursor cursor = cursorLoader.loadInBackground ();
-        int index = cursor.getColumnIndexOrThrow (MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(index);
-    }
-
-    private void upload(String uri){
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://togedog-3795c.appspot.com");
-
-        Uri file = Uri.fromFile(new File(uri));
-        final StorageReference riversRef = storageRef.child("Profiles/"+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
-
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-
-                // Continue with the task to get the download URL
-                return riversRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
-
-                    MapDTO mapDTO = new MapDTO();
-
-                    mapDTO.doo = doo_1;
-                    mapDTO.ssi = si_1;
-                    database.getReference().child("MapTest").child(doo_1).setValue(mapDTO);
-                } else {
-                    // Handle failures
-                    // ...
-                }
-            }
-        });
-    }
 }

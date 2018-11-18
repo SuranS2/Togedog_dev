@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private String AccessToken = "";
     private String[][] Do;
-    private String[][] Gun;
+    private String[] Gun;
 
 
 
@@ -145,17 +145,32 @@ public class HomeActivity extends AppCompatActivity {
         do_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(0 < position){
+                    try {
+                        gun_adapter.clear();
+                        gun_adapter.add("시/군/구 선택");
+                        DoTask task2 = new DoTask(AccessToken);
 
-                GunTask task3 = new GunTask(AccessToken, Integer.parseInt( Do[0][position] ) );
-                int i=0;
-                while(true){
-                    if(i<Gun[1].length){
-                        Log.d("i값",Integer.toString(i));
-                        gun_adapter.add(Gun[1][i]);
-                    }else{
-                        break;
+                        GunTask task3 = new GunTask(AccessToken, Integer.parseInt( Do[0][position-1] ) );
+                        Gun = task3.GunResult(task3.execute().get() );
+                        int i=0;
+                        while(true){
+                            if(i<Gun.length){
+                                Log.d("i값",Integer.toString(i));
+                                gun_adapter.add(Gun[i]);
+                            }else{
+                                break;
+                            }
+                            i++;
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
                     }
-                    i++;
+                }else {
+                    gun_adapter.clear();
+                    gun_adapter.add("시/군/구 선택");
                 }
             }
 
@@ -295,7 +310,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
-        databaseReference.child("chat").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("chat_room").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.e("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());
@@ -447,8 +462,7 @@ public class HomeActivity extends AppCompatActivity {
         public String[][] DoResult(String jsonString) {
             String cd = null;
             String addr_name = null;
-            String full_addr = null;
-            String[][] arraysum = new String[3][17];
+            String[][] array = new String[2][17];
             try {
                 JSONArray jarray = new JSONObject(jsonString).getJSONArray("result");
                 for (int i = 0; i < jarray.length(); i++) {
@@ -457,20 +471,14 @@ public class HomeActivity extends AppCompatActivity {
 
                     cd = jObject.optString("cd");
                     addr_name = jObject.optString("addr_name");
-                    full_addr = jObject.optString("full_addr");
 
-                    arraysum[0][i] = cd;
-                    arraysum[1][i] = addr_name;
-                }
-                for (int i = 0; i < arraysum[0].length; i++) {
-                    Log.d("TEST", arraysum[0][i]);
-                    Log.d("TEST", arraysum[1][i]);
-                    Log.d("TEST", Integer.toString(i));
+                    array[0][i] = cd;
+                    array[1][i] = addr_name;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return arraysum;
+            return array;
         }
     }
     class GunTask extends AsyncTask<String, Void , String> {
@@ -522,35 +530,41 @@ public class HomeActivity extends AppCompatActivity {
             return receiveMsg;
         }
 
-        public String[][] DoResult(String jsonString) {
-            String cd = null;
+        public String[] GunResult(String jsonString) {
+//            String cd = null;
             String addr_name = null;
-            String full_addr = null;
-            String[][] arraysum = new String[3][17];
+            ArrayList<String> StringArray = new ArrayList<String>();
             try {
                 JSONArray jarray = new JSONObject(jsonString).getJSONArray("result");
                 for (int i = 0; i < jarray.length(); i++) {
                     HashMap map = new HashMap<>();
                     JSONObject jObject = jarray.getJSONObject(i);
 
-                    cd = jObject.optString("cd");
+//                    cd = jObject.optString("cd");
                     addr_name = jObject.optString("addr_name");
-                    full_addr = jObject.optString("full_addr");
 
-                    arraysum[0][i] = cd;
-                    arraysum[1][i] = addr_name;
-                    arraysum[2][i] = full_addr;
+//                    array[0][i] = cd;
+//                    array[i] = addr_name;
+                    StringArray.add(addr_name);
+
                 }
-                for (int i = 0; i < arraysum[0].length; i++) {
-                    Log.d("TEST", arraysum[0][i]);
-                    Log.d("TEST", arraysum[1][i]);
-                    Log.d("TEST", arraysum[2][i]);
-                    Log.d("TEST", Integer.toString(i));
+                for (int i = 0; i < StringArray.size(); i++) {
+                    Log.d("GUN_TEST", StringArray.get(i) );
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return arraysum;
+            String[] array = StringArray.toArray(new String[0]);
+//            String 배열 인스턴스가 파라메터로 넘어갔는데, size를 '0'으로 명시했다.
+//            이것이 무슨의미일까? 정리하자면 아래와 같다.
+//
+//            1. List를 toArray 메서드에 파라메터로 넘어가는 배열 객체의 size만큼의 배열로 전환한다.
+//            2. 단, 해당 List size가 인자로 넘어가는 배열 객체의 size보다 클때, 해당 List의 size로 배열이 만들어진다.
+//            3. 반대로 해당 List size가 인자로 넘어가는 배열객체의 size보다 작을때는, 인자로 넘어가는 배열객체의 size로 배열이 만들어진다.
+//
+//                    여기서 위의 예제에서의 stringArray의 크기는 '3' 이다. 인자로 넘어가는 배열의 size가 '0'이므로, 원래 List의 size로 배열이 만들어진 것이다.
+            //http://asuraiv.blogspot.com/2015/06/java-list-toarray.html
+            return array;
         }
     }
 }

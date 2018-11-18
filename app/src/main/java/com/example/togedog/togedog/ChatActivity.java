@@ -135,7 +135,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 //user name = key값
                 ChatDTO chat = new ChatDTO(USER_NAME, chat_edit.getText().toString()); //ChatDTO를 이용하여 데이터를 묶는다.
-                databaseReference.child("chat").child(CHAT_NAME).push().setValue(chat); // 데이터 푸쉬
+                databaseReference.child("chat_room").child(CHAT_NAME).child("message").push().setValue(chat); // 데이터 푸쉬
                 chat_edit.setText(""); //입력창 초기화
 
             }
@@ -221,7 +221,7 @@ public class ChatActivity extends AppCompatActivity {
         
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 등..리스너 관리
-        databaseReference.child("chat").child("message").child(chat_name).addChildEventListener(new ChildEventListener() {
+        databaseReference.child("chat_room").child(chat_name).child("message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 addMessage(dataSnapshot, adapter);
@@ -254,12 +254,12 @@ public class ChatActivity extends AppCompatActivity {
     //메세지 전송
     private void addMessage(DataSnapshot dataSnapshot, ArrayAdapter<String> adapter) {
         ChatDTO chatDTO = dataSnapshot.getValue(ChatDTO.class);
-        adapter.add(chatDTO.getUserName() + " : " + chatDTO.getMessage());
+        adapter.add(chatDTO.getUserName() + " : " + chatDTO.getChat());
     }
 
     private void removeMessage(DataSnapshot dataSnapshot, ArrayAdapter<String> adapter) {
         ChatDTO chatDTO = dataSnapshot.getValue(ChatDTO.class);
-        adapter.remove(chatDTO.getUserName() + " : " + chatDTO.getMessage());
+        adapter.remove(chatDTO.getUserName() + " : " + chatDTO.getChat());
         
     }
     //메세지 전송
