@@ -478,6 +478,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 //        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
 //        conditionRef.child(chat_name.toString()).setValue(ChatInfoDTO);
         databaseReference.child("chat_room").child(chat_name).child("info").setValue(chatinfo_dto); // 데이터 푸쉬
+        databaseReference.child("chat_room").child(chat_name).child("message").push();
     }
 
     @Override

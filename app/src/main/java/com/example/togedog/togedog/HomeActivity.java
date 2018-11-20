@@ -125,7 +125,6 @@ public class HomeActivity extends AppCompatActivity {
         do_adapter.add("도 선택");
         while(true){
             if(i<Do[1].length){
-                Log.d("i값",Integer.toString(i));
                 do_adapter.add(Do[1][i]);
             }else{
                 break;
@@ -158,7 +157,6 @@ public class HomeActivity extends AppCompatActivity {
                         int i=0;
                         while(true){
                             if(i<Gun.length){
-                                Log.d("i값",Integer.toString(i));
                                 gun_adapter.add(Gun[i]);
                             }else{
                                 break;
@@ -298,14 +296,15 @@ public class HomeActivity extends AppCompatActivity {
     private void showChatList() {
         // 리스트 어댑터 생성 및 세팅
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        adapter.clear();
         chat_list.setAdapter(adapter);
         //리스트 액션 추가
         chat_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), chat_list.getSelectedItem().toString() ,Toast.LENGTH_LONG).show();
                 Intent chat_id_intent = new Intent(getApplicationContext(),ChatActivity.class);
-                chat_id_intent.putExtra("chat_name" , chat_list.getSelectedItem().toString() );
+                Log.d("에러 : " , chat_list.getItemAtPosition(position).toString());
+                chat_id_intent.putExtra("chat_name" , chat_list.getItemAtPosition(position).toString() );
                 startActivity(chat_id_intent);
             }
         });
@@ -550,7 +549,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 }
                 for (int i = 0; i < StringArray.size(); i++) {
-                    Log.d("GUN_TEST", StringArray.get(i) );
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
