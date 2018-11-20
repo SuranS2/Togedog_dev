@@ -14,7 +14,7 @@ public class ChatInfoDTO {
 
     public String chat_do;
     public String chat_gun;
-
+    public String chat_add;
 //    public int[] lm = {0, 0, 0, 0, 0, 0};
 //    public int[] dow = {0, 0, 0, 0, 0, 0, 0};
     public int chat_mon;
@@ -33,4 +33,5 @@ public class ChatInfoDTO {
     public int chat_unlimit;
 
     public String chat_warning;
+    public String room_name;
 }

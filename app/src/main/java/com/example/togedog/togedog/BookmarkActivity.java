@@ -77,6 +77,17 @@ public class  BookmarkActivity extends AppCompatActivity {
         DatabaseReference dogbirth = dref.child("User").child(auth.getUid()).child("Birth");
         final DatabaseReference image = dref.child("User").child(auth.getUid()).child("ProfileImage");
 
+        //이미지 가져오기
+        StorageReference storageReference = storage.getReferenceFromUrl("gs://togedog-3795c.appspot.com");
+        final StorageReference pathRef = storageReference.child("Profiles").child(auth.getUid());
+        pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Glide.with(BookmarkActivity.this).load(uri).into(photo_view);
+            }
+        });
+
         //구글아이디 가져오기
         userid.addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,17 +155,6 @@ public class  BookmarkActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-
-        //이미지 가져오기
-        StorageReference storageReference = storage.getReferenceFromUrl("gs://togedog-3795c.appspot.com");
-        final StorageReference pathRef = storageReference.child("Profiles").child(auth.getUid());
-        pathRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-
-                Glide.with(BookmarkActivity.this).load(uri).into(photo_view);
             }
         });
 

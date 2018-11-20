@@ -1,13 +1,18 @@
 package com.example.togedog.togedog;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.support.annotation.NonNull;
 import android.text.Html;
 import android.widget.TextView;
@@ -64,10 +74,11 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private static final int CROP_FROM_iMAGE = 2;
     private String ImagePath;
     private String absolutePath;
-    
-    
-    
-    
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private FirebaseStorage storage;
+
+
     ImageView iv_UserPhoto;
 
     
@@ -92,8 +103,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private TextView mAttributions;
     private String chat_do;
     private String chat_gun;
-    
-    private FirebaseAuth auth;
+
 
 
     @Override
@@ -101,6 +111,10 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
         chatinfo_dto = new ChatInfoDTO();
+
+        auth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
@@ -172,88 +186,57 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         room_create = new Intent(CreateActivity.this, HomeActivity.class);
 
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+
+        }
     }
 
     // 액티비티 내부에 작동할 함수 등록
 
-    public void doTakePhotoAction()
-    { //카메라 촬영 후 이미지 가져오기
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        // 임시로 사용할 파일의 경로를 생성
-        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        //외부저장소 이용
-        mImageCaputreUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url ));
-
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT , mImageCaputreUri );
-        startActivityForResult(intent, PICK_FROM_CAMERA );
-    }
     public void doTakeAlbumAction(){ //앨범에서 이미지 가져오기
         //앨범 호출
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_FROM_ALBUM );
     }
     public void onActivityResult(int requestCode , int resultCode , Intent data){
         super.onActivityResult(requestCode , resultCode , data);
+        if(resultCode != RESULT_OK) {
+            return;
+        }
         switch(requestCode){
             case PICK_FROM_ALBUM:{
-                //이후의 처리가 카메라와 같으므로 일단 Break 없이 진행
-                //실제 코드에서는 좀 더 합리적인 방법을 선택하시길 바랍니다.
-                mImageCaputreUri = data.getData();
-            }
-            case PICK_FROM_CAMERA:{
-                //이미지를 가져온 이후의 리사이즈할 이미지 크기를 결정
-                //이후에 이미지 크롭 어플리케이션 호출
-                Intent intent = new Intent("com.android.camera.action.CROP");
-                intent.setDataAndType(mImageCaputreUri, "image/*");
+                Uri uri = data.getData();
+                ImagePath = getPath(data.getData());
+                Log.d("확인" , "사진 getPath성공");
+                File f = new File(ImagePath);
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
-                //CROP할 이미지를 200*200 크기로 저장
-                intent.putExtra("outputX" ,200 ); //CROP 이미지 x축 크기
-                intent.putExtra("outputY" ,200 ); //CROP 이미지 y축 크기
-                intent.putExtra("aspectX" ,1 ); //CROP 이미지 x축 비율
-                intent.putExtra("aspectY" ,1 ); //CROP 이미지 y축 비율
-                intent.putExtra("scale", true);
-                intent.putExtra("return-data" , true);
-                startActivityForResult(intent , CROP_FROM_iMAGE);//CROP_FROM_iMAGE로 case문 이동
-                break;
+                    iv_UserPhoto = (ImageView)findViewById(R.id.Create_img);
 
-            }
-            case CROP_FROM_iMAGE: {
-                //크롭이 된 이후의 이미지를 넘겨받는다
-                //이미지뷰에 이미지를 보여준다거나 부가적인 작업 이후에
-                //임시 파일 삭제
-                if (resultCode != RESULT_OK) {
-                    return;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        iv_UserPhoto.setBackground(null);
+                    }
+                    iv_UserPhoto.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                final Bundle extras = data.getExtras();
-                //CROP된 이미지를 저장하기 위한 FILE 경로
-                //외부저장소 이용
-                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel/" + System.currentTimeMillis() + ".jpg";
 
-                if (extras != null) {
-                    Bitmap photo = extras.getParcelable("data");//CROP된 BITMAP
-                    iv_UserPhoto.setImageBitmap(photo);//레이아웃의 이미지칸에 CROP된 BITMAP을 보여줌
-
-                    storeCropImage(photo, filePath); //CROP된 이미지를 외부저장소 , 앨범에 저장한다.
-                    absolutePath = filePath;
-                    break;
-                }
-                //임시 파일 삭제
-                File f = new File(mImageCaputreUri.getPath());
-                if (f.exists()) {
-                    f.delete();
-                }
             }
             case PLACE_PICKER_REQUEST:{
                 try {
                     final Place place = PlacePicker.getPlace(this, data);
-                    final CharSequence name = place.getName();
+                    final CharSequence addres = place.getName();
                     final CharSequence address = place.getAddress();
                     String attributions = (String) place.getAttributions();
                     if (attributions == null) {
                         attributions = "";
                     }
+                    String addres_1= addres.toString();
                     String address_1 = address.toString();
 
                     String[] array = address_1.split(" ");
@@ -261,6 +244,9 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                     String chat_do = array[1];
                     String chat_gun = array[2];
 
+                    String chat_dong = array[3];
+                    String add = chat_dong + addres_1;
+                    chatinfo_dto.chat_add = add;
                     chatinfo_dto.chat_do = chat_do;
                     chatinfo_dto.chat_gun = chat_gun;
 
@@ -276,33 +262,6 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 super.onActivityResult(requestCode , resultCode , data);
         }
     }
-    //Bitmap 저장하는 부분
-    private void storeCropImage(Bitmap bitmap , String filePath){
-        // SmartWheel 폴더를 생성하여 이미지를 저장하는 방식
-        // 외부저장소 절대경로
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel";
-
-        File directory_SmartWheel = new File(dirPath);
-
-        if(!directory_SmartWheel.exists()){
-            //SmartWheel 디렉터리에 폴더가 없다면 (새로 이미지를 저장할 경우 )
-            directory_SmartWheel.mkdir();
-        }
-        File copyFile = new File(filePath);
-        BufferedOutputStream out = null;
-
-        try{
-            copyFile.createNewFile();
-            out = new BufferedOutputStream(new FileOutputStream(copyFile));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100 , out );
-            //sendBroadcast를 통해 Crop된 사진을 앨범에 보이도록 갱신
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE , Uri.fromFile(copyFile)));
-            out.flush();
-            out.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
 
 
@@ -311,37 +270,30 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         view.setSelected(!view.isSelected());
         switch (view.getId()) {
             // 버튼 이벤트
-//            case R.id.Create_img :
-//                // 참고 http://jeongchul.tistory.com/287
-//                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        doTakePhotoAction();
-//                    }
-//                };
-//
-//                // 앨범선택! (사진 선택해서 등록)
-//                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        doTakeAlbumAction();
-//                    }
-//                };
-//                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                };
-//
-//                // 알림창 등록 및 띄우기
-//                new AlertDialog.Builder(this)
-//                        .setTitle("업로드할 이미지 선택")
-//                        .setPositiveButton("사진촬영",cameraListener)
-//                        .setNeutralButton("앨범선택", albumListener)
-//                        .setNegativeButton("취소",cancelListener)
-//                        .show();
-//                break;
+            case R.id.Create_img :
+                // 참고 http://jeongchul.tistory.com/287
+
+                // 앨범선택! (사진 선택해서 등록)
+                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doTakeAlbumAction();
+                    }
+                };
+                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                };
+
+                // 알림창 등록 및 띄우기
+              new AlertDialog.Builder(this)
+                    .setTitle("업로드할 이미지 선택")
+                    .setPositiveButton("앨범선택",albumListener)
+                      .setNegativeButton("취소",cancelListener)
+                       .show();
+              break;
             case R.id.Limit_bt1:
                 if(view.isSelected()) lm[0]=1;
                 else lm[0]=0;
@@ -440,6 +392,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 chatinfo_dto.fin_min = fhourspinner.getSelectedItem().toString();
                 
 //                chatinfo_dto.dow = dow;
+                chatinfo_dto.chat_mon = dow[0];
                 chatinfo_dto.chat_tues = dow[1];
                 chatinfo_dto.chat_wed = dow[2];
                 chatinfo_dto.chat_thur = dow[3];
@@ -463,6 +416,9 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 //firebase 채팅방 리스트 업데이트
                 // 방 이름 전송
                 updateChatList(chat_name.getText().toString());
+                Log.d("확인" , "사진업로드시작");
+                upload(ImagePath);
+                Log.d("확인" , "사진업로드 끝");
                 startActivity(room_create);
 
                 break;
@@ -477,8 +433,31 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         auth = FirebaseAuth.getInstance();
 //        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
 //        conditionRef.child(chat_name.toString()).setValue(ChatInfoDTO);
-        databaseReference.child("chat_room").child(chat_name).child("info").setValue(chatinfo_dto); // 데이터 푸쉬
-        databaseReference.child("chat_room").child(chat_name).child("message").push();
+
+        chatinfo_dto.room_name = chat_name;
+// 데이터 푸쉬
+        // databaseReference.child("chat_room").child(chat_name).child("info").setValue(chatinfo_dto);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("message").push();
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("RoomName").setValue(chatinfo_dto.room_name);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Monday").setValue(chatinfo_dto.chat_mon);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Tuesday").setValue(chatinfo_dto.chat_tues);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Wednesday").setValue(chatinfo_dto.chat_wed);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Thursday").setValue(chatinfo_dto.chat_thur);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Friday").setValue(chatinfo_dto.chat_fri);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Saturday").setValue(chatinfo_dto.chat_sat);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Sunday").setValue(chatinfo_dto.chat_sun);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitSixmonth").setValue(chatinfo_dto.chat_limitsixmon);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitYear").setValue(chatinfo_dto.chat_limityear);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitSo").setValue(chatinfo_dto.chat_limitso);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitJung").setValue(chatinfo_dto.chat_limitjung);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitDae").setValue(chatinfo_dto.chat_limitdae);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitSixmonth").setValue(chatinfo_dto.chat_limitsixmon);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("UnLimit").setValue(chatinfo_dto.chat_unlimit);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Warning").setValue(chatinfo_dto.chat_warning);
+//        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Do").setValue(chatinfo_dto.chat_do);
+//        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("SiGunGu").setValue(chatinfo_dto.chat_gun);
+//        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Address").setValue(chatinfo_dto.chat_add);
+
     }
 
     @Override
@@ -488,6 +467,49 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
 
 
     //도랑 시 db에 넣는 거 도전
+    public String getPath(Uri uri){
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(this, uri, proj,null, null, null);
 
+        Cursor cursor = cursorLoader.loadInBackground ();
+        int index = cursor.getColumnIndexOrThrow (MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(index);
+    }
+
+    private void upload(String uri){
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://togedog-3795c.appspot.com");
+        Uri file = Uri.fromFile(new File(uri));
+        final StorageReference RoomIRef = storageRef.child("RoomImage/").child(chatinfo_dto.room_name);
+        UploadTask uploadTask = RoomIRef.putFile(file);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return RoomIRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    chatinfo_dto.imageUrl_chat = downloadUri.toString();
+                    Log.d("확인" , "uri 다운로드성공");
+                    databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("ChatImageUrl").setValue(chatinfo_dto.imageUrl_chat);
+                    Log.d("확인" , "사진 업로드 성공");
+
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+    }
 
 }
