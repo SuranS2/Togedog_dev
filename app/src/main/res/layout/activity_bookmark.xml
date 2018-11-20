@@ -2,28 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/Book1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="#8f7a65">
+        android:background="#8f7a65"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="30dp"
-            android:background="@drawable/myrtitle"
-            android:layout_marginLeft="40dp"
-            android:layout_centerVertical="true"/>
+            android:layout_width="130dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/myrtitle" />
+
         <Button
-            android:id="@+id/Coin"
+            android:id="@+id/Coin_Img"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_toLeftOf="@id/Home_bt"
             android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
-            android:background="@drawable/coin"/>
+            android:layout_toLeftOf="@id/Coin_Num"
+            android:background="@drawable/coin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/Home_bt"
+            android:textSize="15dp"
+            android:text="x100"
+            android:id="@+id/Coin_Num"
+            android:textColor="#fef4e8"/>
+
         <Button
             android:id="@+id/Home_bt"
             android:layout_width="30dp"
@@ -31,7 +45,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:background="@drawable/homebt"/>
+            android:background="@drawable/homebt" />
     </RelativeLayout>
 
     <LinearLayout
@@ -44,21 +58,151 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="※ 가입한 시간 순으로 모임이 표시됩니다 ※"/>
+            android:textSize="20dp"
+            android:text="내 정보"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="#8f7a65"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/Profile_Infor"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/Photo_View"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="visible"
+                tools:visibility="visible"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/Infor_View">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/Google_ID"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="GoogleID : "
+                        android:textSize="15dp"
+                        android:textColor="#8f7a65"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/id_view"
+                        android:textSize="13dp"
+                        android:textColor="#8f7a65"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/Nick_Name">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="닉네임 : "
+                        android:textSize="15dp"
+                        android:textColor="#8f7a65"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/nick_view"
+                        android:textSize="13dp"
+                        android:textColor="#8f7a65"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/Dog_Name">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="댕댕이 이름 : "
+                        android:textSize="15dp"
+                        android:textColor="#8f7a65"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogname_view"
+                        android:textSize="13dp"
+                        android:textColor="#8f7a65"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/Dog_Type">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="종류 : "
+                        android:textColor="#8f7a65"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogtype_view"
+                        android:textSize="13dp"
+                        android:textColor="#8f7a65"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/Dog_Birth">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="생일 : "
+                        android:textSize="15dp"
+                        android:textColor="#8f7a65"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogbirth_view"
+                        android:textSize="13dp"
+                        android:textColor="#8f7a65"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <GridView
-            android:id="@+id/Book_grid"
+            android:id="@+id/Room_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:columnWidth="70dp"
-            android:numColumns="3"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
-            android:gravity="center"
             android:layout_marginTop="20dp"
-            >
+            android:columnWidth="70dp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="3"
+            android:verticalSpacing="10dp">
         </GridView>
     </LinearLayout>
 </LinearLayout>
