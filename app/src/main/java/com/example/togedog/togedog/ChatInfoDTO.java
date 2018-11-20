@@ -4,7 +4,6 @@ import android.text.Editable;
 
 public class ChatInfoDTO {
 
-
     public String imageUrl_chat;
 
     public String sta_hour;
@@ -14,8 +13,8 @@ public class ChatInfoDTO {
 
     public String chat_do;
     public String chat_gun;
-
-//    public int[] lm = {0, 0, 0, 0, 0, 0};
+    public String chat_add;
+    //    public int[] lm = {0, 0, 0, 0, 0, 0};
 //    public int[] dow = {0, 0, 0, 0, 0, 0, 0};
     public int chat_mon;
     public int chat_tues;
@@ -33,4 +32,6 @@ public class ChatInfoDTO {
     public int chat_unlimit;
 
     public String chat_warning;
+    public String room_name;
+
 }

@@ -248,12 +248,13 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
             case PLACE_PICKER_REQUEST:{
                 try {
                     final Place place = PlacePicker.getPlace(this, data);
-                    final CharSequence name = place.getName();
+                    final CharSequence addres = place.getName();
                     final CharSequence address = place.getAddress();
                     String attributions = (String) place.getAttributions();
                     if (attributions == null) {
                         attributions = "";
                     }
+                    String addres_1=addres.toString();
                     String address_1 = address.toString();
 
                     String[] array = address_1.split(" ");
@@ -261,8 +262,9 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                     String chat_do = array[1];
                     String chat_gun = array[2];
 
-                    chatinfo_dto.chat_do = chat_do;
-                    chatinfo_dto.chat_gun = chat_gun;
+
+                    chatinfo_dto.chat_do = chat_do;//도
+                    chatinfo_dto.chat_gun = chat_gun;//군
 
                     mName.setText(chat_do);
                     mAddress.setText(chat_gun);
@@ -459,6 +461,9 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
                 chatinfo_dto.chat_limitdae = lm[4];
                 chatinfo_dto.chat_unlimit = lm[5];
                 chatinfo_dto.chat_warning = editWarning_str;
+
+
+
                 
                 //firebase 채팅방 리스트 업데이트
                 // 방 이름 전송
@@ -477,8 +482,30 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
         auth = FirebaseAuth.getInstance();
 //        ChatDTO chat = new ChatDTO("☺", auth.getCurrentUser().getDisplayName() + "님이 채팅방을 생성했습니다.");
 //        conditionRef.child(chat_name.toString()).setValue(ChatInfoDTO);
-        databaseReference.child("chat_room").child(chat_name).child("info").setValue(chatinfo_dto); // 데이터 푸쉬
-        databaseReference.child("chat_room").child(chat_name).child("message").push();
+
+        chatinfo_dto.room_name = chat_name;
+// 데이터 푸쉬
+        // databaseReference.child("chat_room").child(chat_name).child("info").setValue(chatinfo_dto);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("message").push();
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("RoomName").setValue(chatinfo_dto.room_name);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Monday").setValue(chatinfo_dto.chat_mon);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Tuesday").setValue(chatinfo_dto.chat_tues);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Wednesday").setValue(chatinfo_dto.chat_wed);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Thursday").setValue(chatinfo_dto.chat_thur);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Friday").setValue(chatinfo_dto.chat_fri);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Saturday").setValue(chatinfo_dto.chat_sat);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Sunday").setValue(chatinfo_dto.chat_sun);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitSixmonth").setValue(chatinfo_dto.chat_limitsixmon);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitYear").setValue(chatinfo_dto.chat_limityear);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitSo").setValue(chatinfo_dto.chat_limitso);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitJung").setValue(chatinfo_dto.chat_limitjung);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitDae").setValue(chatinfo_dto.chat_limitdae);        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("LimitSixmonth").setValue(chatinfo_dto.chat_limitsixmon);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("UnLimit").setValue(chatinfo_dto.chat_unlimit);
+        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Warning").setValue(chatinfo_dto.chat_warning);
+//        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Do").setValue(chatinfo_dto.chat_do);
+//        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("SiGunGu").setValue(chatinfo_dto.chat_gun);
+//        databaseReference.child("chat_room").child(chatinfo_dto.room_name).child("info").child("Address").setValue(chatinfo_dto.chat_add);
+
     }
 
     @Override
