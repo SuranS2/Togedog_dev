@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
             ActTask task1 = new ActTask();
             AccessToken = task1.execute().get();
             DoTask task2 = new DoTask(AccessToken);
-            Do = task2.DoResult( task2.execute().get() );
+//            Do = task2.DoResult( task2.execute().get() );
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -119,7 +119,7 @@ public class HomeActivity extends AppCompatActivity {
         do_spinner.setAdapter(do_adapter);
 
 
-        Log.d("TEST length" , Integer.toString(Do[1].length ) );
+/*        Log.d("TEST length" , Integer.toString(Do[1].length ) );
         int i=0;
         do_adapter.clear();
         do_adapter.add("도 선택");
@@ -131,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             i++;
         }
-
+*/
         gun_spinner = (Spinner)findViewById(R.id.Spinner_Gun);
 
         // array.xml 에서 Do 를 가지고옵니다.
@@ -298,14 +298,16 @@ public class HomeActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         adapter.clear();
         chat_list.setAdapter(adapter);
+
         //리스트 액션 추가
         chat_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent chat_id_intent = new Intent(getApplicationContext(),ChatActivity.class);
+                Intent infor_room = new Intent(getApplicationContext(),InitRoomActivity.class);
                 Log.d("에러 : " , chat_list.getItemAtPosition(position).toString());
-                chat_id_intent.putExtra("chat_name" , chat_list.getItemAtPosition(position).toString() );
-                startActivity(chat_id_intent);
+                infor_room.putExtra("chat_name" , chat_list.getItemAtPosition(position).toString() );
+                startActivity(infor_room);
+
             }
         });
 

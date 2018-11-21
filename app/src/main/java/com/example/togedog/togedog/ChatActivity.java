@@ -117,7 +117,7 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         CHAT_NAME = intent.getStringExtra("chat_name");
         auth = FirebaseAuth.getInstance();
-        USER_NAME = auth.getCurrentUser().getDisplayName();
+//        USER_NAME = auth.getCurrentUser().getDisplayName();
 //                intent.getStringExtra("userName");
 //        인증 ID로 대체
 
