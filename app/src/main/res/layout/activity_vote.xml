@@ -31,7 +31,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="10dp">
             <TextView
                 android:layout_width="wrap_content"
@@ -42,25 +42,34 @@
                 android:textSize="15dp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="날짜"
-                android:textSize="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/editText"
+                android:id="@+id/TextView_v1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:ems="8"
                 android:hint="장소입력"
                 android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/TextView_vp1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="자세한 장소"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="날짜"
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/btnPick"
@@ -79,11 +88,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_marginBottom="10dp">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="시간"
@@ -117,106 +126,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:id="@+id/Vote2"
-        android:background="@drawable/border">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="장소"
-                android:layout_marginLeft="10dp"
-                android:textSize="15dp"
-                android:ems="10" />
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="날짜"
-                android:textSize="15dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-            <EditText
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:hint="장소입력"
-                android:id="@+id/editText2"
-                android:layout_marginLeft="10dp"
-                android:inputType="textPersonName"
-                android:ems="8"/>
-            <Button
-                android:layout_height="40dp"
-                android:layout_width="40dp"
-                android:background="@drawable/calender"
-                android:layout_marginLeft="5dp"
-                android:id="@+id/btnPick2"/>
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text=""
-                android:id="@+id/txtView2"/>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="10dp">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:text="시간"
-                android:textSize="15dp"
-                android:layout_marginLeft="10dp" />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="10dp">
-                <Spinner
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/vote_time2"
-                    android:entries="@array/date_time"/>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text=":"
-                    android:id="@+id/textView7"/>
-                <Spinner
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/vote_minute2"
-                    android:entries="@array/date_minute"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:id="@+id/Vote3"
-        android:background="@drawable/border">
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="10dp">
             <TextView
                 android:layout_width="wrap_content"
@@ -225,71 +146,201 @@
                 android:ems="10"
                 android:text="장소"
                 android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/TextView_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:ems="8"
+                android:hint="장소입력"
+                android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/TextView_vp2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="자세한 장소"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="날짜"
                 android:textSize="15dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-            <EditText
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:hint="장소입력"
-                android:id="@+id/editText3"
-                android:layout_marginLeft="10dp"
-                android:inputType="textPersonName"
-                android:ems="8"/>
+
             <Button
-                android:layout_height="40dp"
+                android:id="@+id/btnPick2"
                 android:layout_width="40dp"
-                android:background="@drawable/calender"
+                android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
-                android:id="@+id/btnPick3"/>
+                android:background="@drawable/calender" />
+
             <TextView
-                android:layout_height="wrap_content"
+                android:id="@+id/txtView2"
                 android:layout_width="wrap_content"
-                android:text=""
-                android:id="@+id/txtView3"/>
+                android:layout_height="wrap_content"
+                android:text="" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_marginBottom="10dp">
+
             <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
                 android:text="시간"
-                android:textSize="15dp"
-                android:layout_marginLeft="10dp" />
+                android:textSize="15dp" />
+
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="10dp">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal">
+
                 <Spinner
-                    android:layout_height="wrap_content"
+                    android:id="@+id/vote_time2"
                     android:layout_width="wrap_content"
-                    android:id="@+id/vote_time3"
-                    android:entries="@array/date_time"/>
+                    android:layout_height="wrap_content"
+                    android:entries="@array/date_time" />
 
                 <TextView
-                    android:layout_height="wrap_content"
+                    android:id="@+id/textView7"
                     android:layout_width="wrap_content"
-                    android:text=":"
-                    android:id="@+id/textView8"/>
+                    android:layout_height="wrap_content"
+                    android:text=":" />
+
                 <Spinner
-                    android:layout_height="wrap_content"
+                    android:id="@+id/vote_minute2"
                     android:layout_width="wrap_content"
-                    android:id="@+id/vote_minute3"
-                    android:entries="@array/date_minute"/>
+                    android:layout_height="wrap_content"
+                    android:entries="@array/date_minute" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/Vote3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:ems="10"
+                android:text="장소"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/TextView_v3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:ems="8"
+                android:hint="장소입력"
+                android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/TextView_vp3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="자세한 장소"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="날짜"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnPick3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/calender" />
+
+            <TextView
+                android:id="@+id/txtView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="시간"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/vote_time3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/date_time" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":" />
+
+                <Spinner
+                    android:id="@+id/vote_minute3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/date_minute" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
 
 
 
@@ -307,7 +358,8 @@
             android:layout_marginRight="10dp"
             android:background="#8f7a65"
             android:textColor="#fef4e8"
-            android:id="@+id/button_create_vote"/>
+            android:id="@+id/button_create_vote"
+            android:onClick="onClick"/>
         <Button
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

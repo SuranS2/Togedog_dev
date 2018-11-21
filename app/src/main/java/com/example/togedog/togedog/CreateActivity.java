@@ -91,6 +91,7 @@ public class CreateActivity extends AppCompatActivity implements GoogleApiClient
     private Intent room_create;
     private ChatInfoDTO chatinfo_dto;
 
+
     protected GeoDataClient mGeoDataClient;
     protected PlaceDetectionClient mPlaceDetectionClient;
     protected GoogleApiClient mGoogleApiClient;

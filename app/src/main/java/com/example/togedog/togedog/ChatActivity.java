@@ -1,5 +1,6 @@
 package com.example.togedog.togedog;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -61,15 +63,18 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),InforActivity.class);
+                intent.putExtra("chat_name",CHAT_NAME);
                 startActivity(intent);
             }
         });
 
+        //투표
         Button button2 = (Button)findViewById(R.id.Vote_bt);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent2 = new Intent(getApplicationContext(), VoteActivity.class);
+                intent2.putExtra("chat_name",CHAT_NAME);
                 startActivity(intent2);
             }
         });
@@ -116,6 +121,10 @@ public class ChatActivity extends AppCompatActivity {
         // 로그인 화면에서 받아온 채팅방 이름, 유저 이름 저장
         Intent intent = getIntent();
         CHAT_NAME = intent.getStringExtra("chat_name");
+        Intent vote_roomname = new Intent(getApplicationContext(),VoteActivity.class);
+        vote_roomname.putExtra("chat_name" , CHAT_NAME );
+
+
         auth = FirebaseAuth.getInstance();
 //        USER_NAME = auth.getCurrentUser().getDisplayName();
 //                intent.getStringExtra("userName");

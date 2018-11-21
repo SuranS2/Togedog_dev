@@ -109,11 +109,11 @@ public class InitRoomActivity extends AppCompatActivity {
         });
 
         //요일 -월
-        Monday.addValueEventListener(new ValueEventListener() {
+        final ValueEventListener valueEventListener = Monday.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int Mon = dataSnapshot.getValue(int.class);
-                if(Mon==1){
+                if (Mon == 1) {
                     infor_roomdays_mo.setImageResource(R.drawable.mon);
                 }
             }
