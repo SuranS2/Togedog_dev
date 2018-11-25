@@ -32,9 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity">
-        </activity>
-
+        <activity android:name=".HomeActivity"></activity>
         <activity android:name=".BookmarkActivity"></activity>
 
         <activity android:name=".SignupActivity" android:configChanges="keyboardHidden|orientation|screenSize" ></activity>

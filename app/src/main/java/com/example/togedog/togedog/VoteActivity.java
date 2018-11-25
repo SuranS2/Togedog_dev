@@ -80,7 +80,7 @@ public class VoteActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
-    String chat_name;
+    static String chat_name;
 
 
     @Override
@@ -216,31 +216,18 @@ public class VoteActivity extends AppCompatActivity implements GoogleApiClient.O
         button_create_vote.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                  Intent intent = new Intent(VoteActivity.this, VotelayoutActivity.class);
+                  Intent intent2 = new Intent(VoteActivity.this, VotelayoutActivity.class);
 
                   // public String place_day1;
                   //    public String place_hour1;
                   //    public String place_min1;
 
                     updateVoteList(chat_name);
+                    intent2.putExtra("chat_name",chat_name);
 
 
-/*
-                  editTextSpot2 = (EditText) findViewById(R.id.editText2);
-                  intent.putExtra("Spot2", editTextSpot2.getText().toString());
-
-
-
-
-                  EditText editTextSpot3 = (EditText) findViewById(R.id.editText3);
-                  intent.putExtra("Spot3", editTextSpot3.getText().toString());
-
-
-
-
-                  startActivity(intent);
-                  finish();
-*/
+                    startActivity(intent2);
+                    finish();
 
 
               }
